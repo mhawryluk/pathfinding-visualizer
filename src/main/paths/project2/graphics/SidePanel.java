@@ -1,5 +1,7 @@
 package paths.project2.graphics;
 
+import paths.project2.engine.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,11 +14,17 @@ public class SidePanel extends JPanel implements ActionListener {
     private final JToggleButton addObstaclesButton;
     private final JToggleButton selectStartButton;
     private final JToggleButton selectEndButton;
+    private final JComboBox<String> algorithmBox;
     private final Color BACKGROUND_COLOR = Color.WHITE;
     private final BoardPanel boardPanel;
 
     public SidePanel(BoardPanel boardPanel){
         this.boardPanel = boardPanel;
+
+        String[] algorithms = {"A*", "Dijkstra", "BreadthFirstSearch"};
+
+        algorithmBox = new JComboBox<>(algorithms);
+        add(algorithmBox);
 
         startStopButton = new JButton("START");
         startStopButton.addActionListener(this);
@@ -48,13 +56,40 @@ public class SidePanel extends JPanel implements ActionListener {
         if (e.getSource() == startStopButton) {
             if (boardPanel.algorithmRunning){
                 boardPanel.algorithmRunning = false;
+                boardPanel.timer.stop();
                 startStopButton.setText("START");
             } else {
+
+                switch ((String)algorithmBox.getSelectedItem()) {
+                    case "A*": {
+                        AStarAlgorithm newAlgorithm = new AStarAlgorithm(boardPanel.getBoard());
+                        newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
+                        newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
+                        boardPanel.algorithm = newAlgorithm;
+                        break;
+                    }
+                    case "Dijkstra": {
+                        DijkstraAlgorithm newAlgorithm = new DijkstraAlgorithm(boardPanel.getBoard());
+                        newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
+                        newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
+                        boardPanel.algorithm = newAlgorithm;
+                        break;
+                    }
+                    case "BreadthFirstSearch": {
+                        BFSAlgorithm newAlgorithm = new BFSAlgorithm(boardPanel.getBoard());
+                        newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
+                        newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
+                        boardPanel.algorithm = newAlgorithm;
+                        break;
+                    }
+                }
                 boardPanel.algorithmRunning = true;
                 startStopButton.setText("STOP");
+                boardPanel.timer.start();
             }
         }
         if (e.getSource() == resetButton) {
+            boardPanel.algorithmRunning = false;
             boardPanel.reset();
             startStopButton.setText("START");
 

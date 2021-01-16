@@ -1,8 +1,6 @@
 package paths.project2.graphics;
 
-import paths.project2.engine.AStarAlgorithm;
-import paths.project2.engine.Board;
-import paths.project2.engine.PathFindingAlgorithm;
+import paths.project2.engine.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,12 +20,12 @@ public class MainWindow extends JFrame {
         SidePanel sidePanel = new SidePanel(boardPanel);
         add(sidePanel, BorderLayout.WEST);
 
-        setBackground(Color.BLACK);
-        setSize(WIDTH, HEIGHT);
+//        setBackground(Color.BLACK);
+//        setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
-        setVisible(true);
+//        setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
         pack();
+        setVisible(true);
     }
 }

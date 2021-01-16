@@ -9,8 +9,8 @@ import java.awt.event.*;
 public class BoardPanel extends JPanel implements ActionListener {
     private Board board;
     private final int squareSize;
-    private final Timer timer;
-    private PathFindingAlgorithm algorithm;
+    public final Timer timer;
+    public PathFindingAlgorithm algorithm;
     public boolean placingObstacles = false;
     public boolean algorithmRunning = false;
     public boolean selectingStart = false;
@@ -50,7 +50,6 @@ public class BoardPanel extends JPanel implements ActionListener {
             @Override
             public void mousePressed(MouseEvent e) {
 
-                System.out.println(algorithm);
                 if (placingObstacles) {
                     Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
                     placeObstacle(clickedField);
@@ -117,5 +116,9 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     protected final void setEndPosition(Vector2d clickedField){
         algorithm.setEndPosition(clickedField);
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

@@ -5,7 +5,8 @@ public class Square {
     public SquareState state;
     public double g;
     public double f;
-    public double dist;
+    public double dist = Double.POSITIVE_INFINITY;
+    public boolean visited = false;
     public Square cameFrom;
 
     public Square(int x, int y){
