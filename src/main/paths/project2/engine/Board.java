@@ -21,4 +21,9 @@ public class Board {
     public Square getSquareAt(int i, int j){
         return board[i][j];
     }
+
+    public Square getSquareAt(Vector2d position){
+        return board[position.x][position.y];
+    }
+
 }

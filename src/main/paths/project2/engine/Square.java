@@ -3,9 +3,9 @@ package paths.project2.engine;
 public class Square {
     private Vector2d position;
     public SquareState state;
-    private Square[] neighbors;
     public double g;
     public double f;
+    public double dist;
     public Square cameFrom;
 
     public Square(int x, int y){

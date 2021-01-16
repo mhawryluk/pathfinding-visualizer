@@ -1,25 +1,33 @@
 package paths.project2.graphics;
 
+import paths.project2.engine.AStarAlgorithm;
 import paths.project2.engine.Board;
+import paths.project2.engine.PathFindingAlgorithm;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
     public MainWindow(){
-        int WIDTH = 600;
-        int HEIGHT = 630;
+        int WIDTH = 100;
+        int HEIGHT = 600;
         int squareSize = 30;
-
-        BoardPanel boardPanel = new BoardPanel(new Board(20,20), squareSize);
-        add(boardPanel);
-
         setTitle("Pathfinding Visualization");
+        setLayout(new BorderLayout(10, 10));
+
+        Board board = new Board(20, 20);
+        BoardPanel boardPanel = new BoardPanel(board, squareSize, new AStarAlgorithm(board));
+        add(boardPanel, BorderLayout.CENTER);
+
+        SidePanel sidePanel = new SidePanel(boardPanel);
+        add(sidePanel, BorderLayout.WEST);
+
         setBackground(Color.BLACK);
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
         setVisible(true);
+        pack();
     }
 }

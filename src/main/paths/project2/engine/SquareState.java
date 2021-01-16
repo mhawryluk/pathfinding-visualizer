@@ -1,14 +1,12 @@
 package paths.project2.engine;
 
-import org.w3c.dom.css.RGBColor;
-
 import java.awt.*;
 
 public enum SquareState {
     CLOSED(255, 0, 0),
     OPEN(0, 255, 0),
     BLANK(255, 255, 255),
-    BARRIER(0, 0, 0),
+    OBSTACLE(0, 0, 0),
     END(128, 0, 128),
     START(255, 165 ,0),
     PATH(64, 224, 208);
