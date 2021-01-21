@@ -7,11 +7,11 @@ public abstract class PathFindingAlgorithm {
     protected Square current;
     protected Square start;
     protected Square end;
-    protected Board board;
+    protected PathBoard board;
     protected boolean ended = false;
 
 
-    public PathFindingAlgorithm(Board board){
+    public PathFindingAlgorithm(PathBoard board){
         this.board = board;
         this.start = board.getSquareAt(0,0);
         this.start.state = SquareState.START;

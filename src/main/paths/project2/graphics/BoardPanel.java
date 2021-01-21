@@ -7,8 +7,8 @@ import java.awt.event.*;
 
 
 public class BoardPanel extends JPanel implements ActionListener {
-    private Board board;
-    private final int squareSize;
+    public Board board;
+    private int squareSize;
     public final Timer timer;
     public PathFindingAlgorithm algorithm;
     public boolean placingObstacles = false;
@@ -16,10 +16,10 @@ public class BoardPanel extends JPanel implements ActionListener {
     public boolean selectingStart = false;
     public boolean selectingEnd = false;
 
-    public BoardPanel(Board board, int squareSize, PathFindingAlgorithm algorithm){
+    public BoardPanel(Board board, PathFindingAlgorithm algorithm){
 
         this.board = board;
-        this.squareSize = squareSize;
+        this.squareSize = Math.min(1000/board.width, 600/board.height);
         timer = new Timer(50, this);
         timer.start();
 
@@ -35,7 +35,8 @@ public class BoardPanel extends JPanel implements ActionListener {
             public void mouseDragged(MouseEvent e) {
                 if (placingObstacles) {
                     Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
-                    placeObstacle(clickedField);
+                    if (board.isWithinBoard(clickedField))
+                            placeObstacle(clickedField);
                 }
             }
 
@@ -80,7 +81,27 @@ public class BoardPanel extends JPanel implements ActionListener {
                 g2D.fillRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
 
                 g2D.setPaint(Color.black);
-                g2D.drawRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
+
+                if (square.up){
+                    g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
+                            (square.getX() + 1) * squareSize, square.getY() * squareSize);
+                }
+
+                if (square.down){
+                    g2D.drawLine(square.getX() * squareSize, (square.getY() + 1)* squareSize,
+                            (square.getX()+1) * squareSize, (square.getY() + 1)* squareSize);
+                }
+
+                if (square.left){
+                    g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
+                            square.getX() * squareSize, (square.getY() + 1)* squareSize);
+                }
+
+                if (square.right){
+                    g2D.drawLine((square.getX() + 1)* squareSize, square.getY() * squareSize,
+                            (square.getX() + 1)* squareSize, (square.getY() + 1)* squareSize);
+                }
+                //g2D.drawRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
             }
         }
     }
@@ -100,8 +121,8 @@ public class BoardPanel extends JPanel implements ActionListener {
     }
 
     public void reset(){
-        this.board = new Board(board.width, board.height);
-        algorithm = new AStarAlgorithm(this.board);
+        this.board = new PathBoard(board.width, board.height);
+        algorithm = new AStarAlgorithm((PathBoard)this.board);
         algorithmRunning = false;
     }
 
@@ -120,5 +141,27 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     public Board getBoard() {
         return board;
+    }
+
+    public void newBoardDimensions(int width, int height) {
+        board = new PathBoard(width, height);
+        squareSize = Math.min(1000/board.width, 600/ board.height);
+        setBounds(300, 0, squareSize* board.width, squareSize* board.width);
+        reset();
+    }
+
+    public void generateObstacles() {
+        ((PathBoard)board).generateRandomObstacles((board.width * board.height) / 3);
+    }
+
+    public void changeMode(Board board){
+        this.board = board;
+        this.squareSize = Math.min(1000/board.width, 600/board.height);
+        timer.start();
+
+        setBackground(Color.WHITE);
+        setBounds(0, 0, squareSize * board.width, squareSize * board.height);
+        setPreferredSize(new Dimension( board.width * squareSize, board.height * squareSize));
+        setLayout(null);
     }
 }

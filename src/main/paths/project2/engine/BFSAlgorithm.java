@@ -7,7 +7,7 @@ public class BFSAlgorithm extends PathFindingAlgorithm{
 
     Queue<Square> queue = new LinkedList<>();
 
-    public BFSAlgorithm(Board board){
+    public BFSAlgorithm(PathBoard board){
         super(board);
     }
 

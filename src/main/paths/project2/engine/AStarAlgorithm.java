@@ -7,7 +7,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
 
     private final PriorityQueue<Square> open = new PriorityQueue<>(Comparator.comparing((x) -> x.f));
 
-    public AStarAlgorithm(Board board){
+    public AStarAlgorithm(PathBoard board){
         super(board);
         this.board = board;
 

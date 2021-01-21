@@ -7,7 +7,7 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm{
 
     private final PriorityQueue <Square> queue = new PriorityQueue<>(Comparator.comparing((x) -> x.dist));
 
-    public DijkstraAlgorithm(Board board){
+    public DijkstraAlgorithm(PathBoard board){
         super(board);
     }
 
