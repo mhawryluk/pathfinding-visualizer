@@ -13,8 +13,14 @@ public class BoardPanel extends JPanel implements ActionListener {
     public PathFindingAlgorithm algorithm;
     public boolean placingObstacles = false;
     public boolean algorithmRunning = false;
+    public boolean mazeGenerating = false;
     public boolean selectingStart = false;
     public boolean selectingEnd = false;
+    public boolean mazeCrawling = false;
+
+
+    public Vector2d crawlerPosition = new Vector2d(0,0);
+
 
     public BoardPanel(Board board, PathFindingAlgorithm algorithm){
 
@@ -78,30 +84,19 @@ public class BoardPanel extends JPanel implements ActionListener {
             for (int j = 0; j < board.height; j++){
                 Square square = board.getSquareAt(i,j);
                 g2D.setPaint(getSquareColor(square));
+
                 g2D.fillRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
 
                 g2D.setPaint(Color.black);
 
-                if (square.up){
-                    g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
+                if (square.up) g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
                             (square.getX() + 1) * squareSize, square.getY() * squareSize);
-                }
-
-                if (square.down){
-                    g2D.drawLine(square.getX() * squareSize, (square.getY() + 1)* squareSize,
+                if (square.down) g2D.drawLine(square.getX() * squareSize, (square.getY() + 1)* squareSize,
                             (square.getX()+1) * squareSize, (square.getY() + 1)* squareSize);
-                }
-
-                if (square.left){
-                    g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
+                if (square.left) g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
                             square.getX() * squareSize, (square.getY() + 1)* squareSize);
-                }
-
-                if (square.right){
-                    g2D.drawLine((square.getX() + 1)* squareSize, square.getY() * squareSize,
+                if (square.right) g2D.drawLine((square.getX() + 1)* squareSize, square.getY() * squareSize,
                             (square.getX() + 1)* squareSize, (square.getY() + 1)* squareSize);
-                }
-                //g2D.drawRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
             }
         }
     }
@@ -111,6 +106,15 @@ public class BoardPanel extends JPanel implements ActionListener {
 
         if (e.getSource() == timer && algorithmRunning) {
             algorithm.step();
+        }
+        if (e.getSource() == timer && mazeGenerating) {
+            boolean ongoing = ((MazeBoard) board).generateMazeStep();
+            if (!ongoing) {
+                mazeGenerating = false;
+                mazeCrawling = true;
+                addKeyListener(new MazeExplorer((MazeBoard) board));
+                requestFocus();
+            }
         }
         repaint();
     }
@@ -154,10 +158,12 @@ public class BoardPanel extends JPanel implements ActionListener {
         ((PathBoard)board).generateRandomObstacles((board.width * board.height) / 3);
     }
 
-    public void changeMode(Board board){
+    public void changeMode(Board board, boolean mazeGenerating){
         this.board = board;
         this.squareSize = Math.min(1000/board.width, 600/board.height);
         timer.start();
+
+        this.mazeGenerating = mazeGenerating;
 
         setBackground(Color.WHITE);
         setBounds(0, 0, squareSize * board.width, squareSize * board.height);

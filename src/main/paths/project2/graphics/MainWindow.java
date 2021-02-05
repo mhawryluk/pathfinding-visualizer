@@ -17,12 +17,11 @@ public class MainWindow extends JFrame {
         SidePanel sidePanel = new SidePanel(boardPanel);
         add(sidePanel, BorderLayout.WEST);
 
-//        setBackground(Color.BLACK);
-//        setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-//        setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
         pack();
         setVisible(true);
+
+        Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
     }
 }

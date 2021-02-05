@@ -9,7 +9,8 @@ public enum SquareState {
     OBSTACLE(0, 0, 0),
     END(128, 0, 128),
     START(255, 165 ,0),
-    PATH(64, 224, 208);
+    PATH(64, 224, 208),
+    MAZECRAWLER(153, 153, 255);
 
     public final Color color;
 

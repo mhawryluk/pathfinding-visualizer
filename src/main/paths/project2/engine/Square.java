@@ -32,4 +32,8 @@ public class Square {
     public int getY(){
         return position.y;
     }
+
+    public Vector2d getPosition(){
+        return position;
+    }
 }

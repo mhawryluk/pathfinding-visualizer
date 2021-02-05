@@ -40,6 +40,18 @@ public class SidePanel extends JPanel implements ActionListener {
         resetButton.addActionListener(this);
         modeButton.addActionListener(this);
 
+        modeButton.setFocusable(false);
+        algorithmBox.setFocusable(false);
+        widthLabel.setFocusable(false);
+        heightLabel.setFocusable(false);
+        setDimensionsButton.setFocusable(false);
+        generateObstaclesButton.setFocusable(false);
+        addObstaclesButton.setFocusable(false);
+        selectStartButton.setFocusable(false);
+        selectEndButton.setFocusable(false);
+        startStopButton.setFocusable(false);
+        resetButton.setFocusable(false);
+
 
         add(modeButton);
         add(algorithmBox);
@@ -132,7 +144,7 @@ public class SidePanel extends JPanel implements ActionListener {
                 mazeMode = false;
                 modeButton.setText("MAZE EXPLORER");
                 PathBoard board = new PathBoard(widthLabel.getValue(), heightLabel.getValue());
-                boardPanel.changeMode(board);
+                boardPanel.changeMode(board, false);
                 algorithmBox.setVisible(true);
                 generateObstaclesButton.setVisible(true);
                 addObstaclesButton.setVisible(true);
@@ -146,7 +158,7 @@ public class SidePanel extends JPanel implements ActionListener {
                 mazeMode = true;
                 modeButton.setText("PATH VISUALIZATION");
                 MazeBoard board = new MazeBoard(widthLabel.getValue(), heightLabel.getValue());
-                boardPanel.changeMode(board);
+                boardPanel.changeMode(board, true);
                 algorithmBox.setVisible(false);
                 generateObstaclesButton.setVisible(false);
                 addObstaclesButton.setVisible(false);
