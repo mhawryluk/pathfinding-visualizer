@@ -36,4 +36,8 @@ public class Square {
     public Vector2d getPosition(){
         return position;
     }
+
+    public double dist(Vector2d position){
+        return Math.max(Math.abs(this.position.x - position.x), Math.abs(this.position.y - position.y));
+    }
 }

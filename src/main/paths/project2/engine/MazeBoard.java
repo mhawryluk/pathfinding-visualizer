@@ -10,8 +10,6 @@ public class MazeBoard extends Board{
     private final Stack<MazeSquare> stack = new Stack<>();
 
     public MazeBoard(int width, int height){
-
-        System.out.println(width+ " " +height);
         this.width = width;
         this.height = height;
 

@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
     public MainWindow(){
-        setTitle("Pathfinding Visualization");
+        setTitle("Pathfinder");
         setLayout(new BorderLayout(10, 10));
 
         PathBoard board = new PathBoard(20, 20);
@@ -28,8 +28,7 @@ public class MainWindow extends JFrame {
         changeFont(this, font);
 
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
-        setBackground(new Color(85, 91, 110));
+        setLocation(screenDim.width/2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
     }
 
     public static void changeFont(Component component, Font font){

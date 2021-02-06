@@ -51,7 +51,6 @@ public class Vector2d {
         return this.x == that.x && this.y == that.y;
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(this.x, this.y);

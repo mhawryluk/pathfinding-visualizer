@@ -11,26 +11,32 @@ public class BoardPanel extends JPanel implements ActionListener {
     private int squareSize;
     public final Timer timer;
     public PathFindingAlgorithm algorithm;
-    public boolean placingObstacles = false;
-    public boolean algorithmRunning = false;
-    public boolean mazeGenerating = false;
-    public boolean selectingStart = false;
-    public boolean selectingEnd = false;
-    public boolean mazeCrawling = false;
+    private MazeExplorer mazeExplorer;
+    private int width;
+    private int height;
+    private final int panelWidth = Toolkit.getDefaultToolkit().getScreenSize().width - 700;
+    private final int panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height - 200;
+
+    public boolean placingObstacles;
+    public boolean algorithmRunning;
+    public boolean mazeGenerating;
+    public boolean selectingStart;
+    public boolean selectingEnd;
+    public boolean mazeCrawling;
+    private boolean showingMaze;
 
 
     public BoardPanel(Board board, PathFindingAlgorithm algorithm){
 
         this.board = board;
-        this.squareSize = Math.min(1000/board.width, 600/board.height);
+        setDimensions(board.width, board.height);
         timer = new Timer(50, this);
         timer.start();
 
         this.algorithm = algorithm;
 
-        setBackground(Color.WHITE);
-        setBounds(0, 0, squareSize * board.width, squareSize * board.height);
-        setPreferredSize(new Dimension( board.width * squareSize, board.height * squareSize));
+        setBounds(0, 0, squareSize * width, squareSize * height);
+        setPreferredSize(new Dimension( width * squareSize, height * squareSize));
         setLayout(null);
 
         addMouseMotionListener(new MouseMotionListener() {
@@ -82,7 +88,15 @@ public class BoardPanel extends JPanel implements ActionListener {
                 Square square = board.getSquareAt(i,j);
                 g2D.setPaint(getSquareColor(square));
 
+                if (mazeCrawling && !showingMaze){
+                    if (mazeExplorer.getCurrentSquare().dist(new Vector2d(i, j)) > 2){
+                        g2D.setPaint(new Color(0x00383D));
+                        g2D.fillRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
+                        continue;
+                    }
+                }
                 g2D.fillRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
+
 
                 g2D.setPaint(new Color(137, 176, 174));
                 g2D.setStroke(new BasicStroke(5));
@@ -110,7 +124,8 @@ public class BoardPanel extends JPanel implements ActionListener {
             if (!ongoing) {
                 mazeGenerating = false;
                 mazeCrawling = true;
-                addKeyListener(new MazeExplorer((MazeBoard) board));
+                mazeExplorer = new MazeExplorer((MazeBoard) board);
+                addKeyListener(mazeExplorer);
                 requestFocus();
             }
         }
@@ -127,9 +142,15 @@ public class BoardPanel extends JPanel implements ActionListener {
     }
 
     public void reset(){
-        this.board = new PathBoard(board.width, board.height);
-        algorithm = new AStarAlgorithm((PathBoard)this.board);
-        algorithmRunning = false;
+        if (mazeGenerating || mazeCrawling){
+            board = new MazeBoard(width, height);
+            mazeCrawling = false;
+            mazeGenerating = true;
+        } else {
+            this.board = new PathBoard(width, height);
+            algorithm = new AStarAlgorithm((PathBoard)this.board);
+            algorithmRunning = false;
+        }
     }
 
     protected final void placeObstacle(Vector2d clickedField){
@@ -149,11 +170,8 @@ public class BoardPanel extends JPanel implements ActionListener {
         return board;
     }
 
-    public void newBoardDimensions(int width, int height) {
-        board = new PathBoard(width, height);
-        squareSize = Math.min(1000/board.width, 600/ board.height);
-        setBounds(300, 0, squareSize* board.width, squareSize* board.width);
-        reset();
+    public void changeMazeVisibility(){
+        showingMaze = !showingMaze;
     }
 
     public void generateObstacles() {
@@ -162,7 +180,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     public void changeMode(Board board, boolean mazeGenerating){
         this.board = board;
-        this.squareSize = Math.min(1000/board.width, 600/board.height);
+        setDimensions(board.width, board.height);
         timer.start();
 
         this.mazeGenerating = mazeGenerating;
@@ -171,5 +189,11 @@ public class BoardPanel extends JPanel implements ActionListener {
         setBounds(0, 0, squareSize * board.width, squareSize * board.height);
         setPreferredSize(new Dimension( board.width * squareSize, board.height * squareSize));
         setLayout(null);
+    }
+
+    public void setDimensions(int width, int height){
+        this.width = width;
+        this.height = height;
+        this.squareSize = Math.min(panelWidth/width, panelHeight/height);
     }
 }

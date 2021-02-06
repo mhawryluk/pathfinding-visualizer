@@ -61,12 +61,18 @@ public abstract class PathFindingAlgorithm {
 
         for (int i = x - 1; i <= x + 1; i++){
             for (int j = y - 1; j <= y + 1; j++){
-                if ((i != x || j != x) && i >= 0 && j >= 0 &&
-                        i < board.width && j < board.height){
+                if ((i != x || j != x) && board.isWithinBoard(new Vector2d(i, j))){
                     Square neighbor = board.getSquareAt(i, j);
-                    if (neighbor.state != SquareState.OBSTACLE) {
-                        neighbors.add(neighbor);
+                    if (neighbor.state == SquareState.OBSTACLE) continue;
+
+                    if (i != x && j != y){
+                        if (board.getSquareAt(i, y).state == SquareState.OBSTACLE &&
+                        board.getSquareAt(x, j).state == SquareState.OBSTACLE){
+                            continue;
+                        }
                     }
+
+                    neighbors.add(neighbor);
                 }
             }
         }

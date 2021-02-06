@@ -17,13 +17,13 @@ public class SidePanel extends JPanel implements ActionListener {
     private final JComboBox<String> algorithmBox;
     private final InputSpinner widthLabel = new InputSpinner("width: ");
     private final InputSpinner heightLabel = new InputSpinner("height: ");
-    private final JButton setDimensionsButton = new JButton("SET DIMENSIONS");
     private final JButton generateObstaclesButton = new JButton("GENERATE OBSTACLES");
     private final JButton modeButton = new JButton("MAZE EXPLORER");
     private final JButton skipGeneratingButton = new JButton("SKIP GENERATING");
+    private final JButton showMazeButton = new JButton("SHOW MAZE");
     private boolean mazeMode = false;
     private final BoardPanel boardPanel;
-    public final Color BackgroundColor = Color.white;
+    public final Color BACKGROUND_COLOR = Color.white;
 
     public SidePanel(BoardPanel boardPanel){
         this.boardPanel = boardPanel;
@@ -34,6 +34,8 @@ public class SidePanel extends JPanel implements ActionListener {
         algorithmBox.setOpaque(true);
         algorithmBox.setAlignmentX(SwingConstants.CENTER);
         algorithmBox.setAlignmentY(SwingConstants.CENTER);
+        ((JLabel)algorithmBox.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
         generateObstaclesButton.addActionListener(this);
         addObstaclesButton.addActionListener(this);
         selectStartButton.addActionListener(this);
@@ -41,36 +43,38 @@ public class SidePanel extends JPanel implements ActionListener {
         startStopButton.addActionListener(this);
         resetButton.addActionListener(this);
         modeButton.addActionListener(this);
+        showMazeButton.addActionListener(this);
         skipGeneratingButton.addActionListener(this);
+
+        showMazeButton.setFocusable(false);
+        skipGeneratingButton.setFocusable(false);
+
+        showMazeButton.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
+        skipGeneratingButton.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
 
         add(modeButton);
         add(widthLabel);
         add(heightLabel);
-        add(setDimensionsButton);
+        add(resetButton);
         add(generateObstaclesButton);
         add(addObstaclesButton);
         add(selectStartButton);
         add(selectEndButton);
         add(algorithmBox);
         add(startStopButton);
-        add(resetButton);
 
-        setBackground(BackgroundColor);
+        setBackground(BACKGROUND_COLOR);
 
-        for (Component component : getComponents()){
-            component.setBackground(BackgroundColor);
+        for (Component component: getComponents()){
+            component.setBackground(BACKGROUND_COLOR);
         }
-        setPreferredSize(new Dimension(300, 600));
+
+        setPreferredSize(new Dimension(200, 500));
         setLayout(new GridLayout(11, 1, 5, 5));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        if (e.getSource() == setDimensionsButton){
-            boardPanel.newBoardDimensions(widthLabel.getValue(), heightLabel.getValue());
-            boardPanel.repaint();
-        }
 
         if (e.getSource() == generateObstaclesButton){
             boardPanel.generateObstacles();
@@ -90,18 +94,23 @@ public class SidePanel extends JPanel implements ActionListener {
             }
         }
         if (e.getSource() == resetButton) {
-            boardPanel.algorithmRunning = false;
+
+            boardPanel.setDimensions(widthLabel.getValue(), heightLabel.getValue());
             boardPanel.reset();
-            startStopButton.setText("START");
 
-            boardPanel.selectingStart = false;
-            selectStartButton.setSelected(false);
+            if (!mazeMode){
+                boardPanel.algorithmRunning = false;
+                startStopButton.setText("START");
 
-            boardPanel.selectingEnd = false;
-            selectEndButton.setSelected(false);
+                boardPanel.selectingStart = false;
+                selectStartButton.setSelected(false);
 
-            boardPanel.placingObstacles = false;
-            addObstaclesButton.setText("ADD OBSTACLES");
+                boardPanel.selectingEnd = false;
+                selectEndButton.setSelected(false);
+
+                boardPanel.placingObstacles = false;
+                addObstaclesButton.setText("SELECT OBSTACLES");
+            }
         }
 
         if (e.getSource() == addObstaclesButton) {
@@ -137,6 +146,9 @@ public class SidePanel extends JPanel implements ActionListener {
             boardPanel.skipMazeGenerating();
         }
 
+        if (e.getSource() == showMazeButton){
+            boardPanel.changeMazeVisibility();
+        }
 
         if (e.getSource() == modeButton){
             if (mazeMode){
@@ -146,13 +158,13 @@ public class SidePanel extends JPanel implements ActionListener {
                 boardPanel.changeMode(board, false);
 
                 remove(skipGeneratingButton);
+                remove(showMazeButton);
                 add(generateObstaclesButton);
                 add(addObstaclesButton);
                 add(selectStartButton);
                 add(selectEndButton);
                 add(algorithmBox);
                 add(startStopButton);
-                add(resetButton);
 
                 changeAlgorithm();
                 boardPanel.reset();
@@ -168,9 +180,8 @@ public class SidePanel extends JPanel implements ActionListener {
                 remove(selectStartButton);
                 remove(selectEndButton);
                 remove(startStopButton);
-                remove(resetButton);
-
                 add(skipGeneratingButton);
+                add(showMazeButton);
             }
         }
     }
