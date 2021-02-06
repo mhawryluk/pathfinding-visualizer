@@ -21,8 +21,9 @@ public class SidePanel extends JPanel implements ActionListener {
     private final JButton generateObstaclesButton = new JButton("GENERATE OBSTACLES");
     private final Color BACKGROUND_COLOR = Color.WHITE;
     private final JButton modeButton = new JButton("MAZE EXPLORER");
+    private final JButton skipGeneratingButton = new JButton("SKIP GENERATING");
     private boolean mazeMode = false;
-    private BoardPanel boardPanel;
+    private final BoardPanel boardPanel;
 
     public SidePanel(BoardPanel boardPanel){
         this.boardPanel = boardPanel;
@@ -30,6 +31,9 @@ public class SidePanel extends JPanel implements ActionListener {
         String[] algorithms = {"A*", "Dijkstra", "BreadthFirstSearch"};
 
         algorithmBox = new JComboBox<>(algorithms);
+        algorithmBox.setOpaque(true);
+        algorithmBox.setAlignmentX(SwingConstants.CENTER);
+        algorithmBox.setAlignmentY(SwingConstants.CENTER);
 
         setDimensionsButton.addActionListener(this);
         generateObstaclesButton.addActionListener(this);
@@ -39,22 +43,9 @@ public class SidePanel extends JPanel implements ActionListener {
         startStopButton.addActionListener(this);
         resetButton.addActionListener(this);
         modeButton.addActionListener(this);
-
-        modeButton.setFocusable(false);
-        algorithmBox.setFocusable(false);
-        widthLabel.setFocusable(false);
-        heightLabel.setFocusable(false);
-        setDimensionsButton.setFocusable(false);
-        generateObstaclesButton.setFocusable(false);
-        addObstaclesButton.setFocusable(false);
-        selectStartButton.setFocusable(false);
-        selectEndButton.setFocusable(false);
-        startStopButton.setFocusable(false);
-        resetButton.setFocusable(false);
-
+        skipGeneratingButton.addActionListener(this);
 
         add(modeButton);
-        add(algorithmBox);
         add(widthLabel);
         add(heightLabel);
         add(setDimensionsButton);
@@ -62,6 +53,7 @@ public class SidePanel extends JPanel implements ActionListener {
         add(addObstaclesButton);
         add(selectStartButton);
         add(selectEndButton);
+        add(algorithmBox);
         add(startStopButton);
         add(resetButton);
 
@@ -139,19 +131,27 @@ public class SidePanel extends JPanel implements ActionListener {
             addObstaclesButton.setSelected(false);
         }
 
+        if (e.getSource() == skipGeneratingButton) {
+            boardPanel.skipMazeGenerating();
+        }
+
+
         if (e.getSource() == modeButton){
             if (mazeMode){
                 mazeMode = false;
                 modeButton.setText("MAZE EXPLORER");
                 PathBoard board = new PathBoard(widthLabel.getValue(), heightLabel.getValue());
                 boardPanel.changeMode(board, false);
-                algorithmBox.setVisible(true);
-                generateObstaclesButton.setVisible(true);
-                addObstaclesButton.setVisible(true);
-                selectStartButton.setVisible(true);
-                selectEndButton.setVisible(true);
-                startStopButton.setVisible(true);
-                resetButton.setVisible(true);
+
+                remove(skipGeneratingButton);
+                add(generateObstaclesButton);
+                add(addObstaclesButton);
+                add(selectStartButton);
+                add(selectEndButton);
+                add(algorithmBox);
+                add(startStopButton);
+                add(resetButton);
+
                 changeAlgorithm();
                 boardPanel.reset();
             } else {
@@ -159,13 +159,16 @@ public class SidePanel extends JPanel implements ActionListener {
                 modeButton.setText("PATH VISUALIZATION");
                 MazeBoard board = new MazeBoard(widthLabel.getValue(), heightLabel.getValue());
                 boardPanel.changeMode(board, true);
-                algorithmBox.setVisible(false);
-                generateObstaclesButton.setVisible(false);
-                addObstaclesButton.setVisible(false);
-                selectStartButton.setVisible(false);
-                selectEndButton.setVisible(false);
-                startStopButton.setVisible(false);
-                resetButton.setVisible(false);
+
+                remove(algorithmBox);
+                remove(generateObstaclesButton);
+                remove(addObstaclesButton);
+                remove(selectStartButton);
+                remove(selectEndButton);
+                remove(startStopButton);
+                remove(resetButton);
+
+                add(skipGeneratingButton);
             }
         }
     }

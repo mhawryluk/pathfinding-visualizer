@@ -17,6 +17,9 @@ public class MainWindow extends JFrame {
         SidePanel sidePanel = new SidePanel(boardPanel);
         add(sidePanel, BorderLayout.WEST);
 
+        LegendPanel legendPanel = new LegendPanel();
+        add(legendPanel, BorderLayout.SOUTH);
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setVisible(true);

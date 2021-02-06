@@ -19,9 +19,6 @@ public class BoardPanel extends JPanel implements ActionListener {
     public boolean mazeCrawling = false;
 
 
-    public Vector2d crawlerPosition = new Vector2d(0,0);
-
-
     public BoardPanel(Board board, PathFindingAlgorithm algorithm){
 
         this.board = board;
@@ -117,6 +114,10 @@ public class BoardPanel extends JPanel implements ActionListener {
             }
         }
         repaint();
+    }
+
+    public void skipMazeGenerating(){
+        while (((MazeBoard) board).generateMazeStep());
     }
 
     private Color getSquareColor(Square square){

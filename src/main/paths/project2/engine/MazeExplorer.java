@@ -11,6 +11,7 @@ public class MazeExplorer implements KeyListener {
     public MazeExplorer(MazeBoard board) {
         this.board = board;
         currentSquare = board.getSquareAt(new Vector2d(0,0));
+        currentSquare.state = SquareState.MAZECRAWLER;
     }
 
     @Override
