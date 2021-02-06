@@ -19,11 +19,11 @@ public class SidePanel extends JPanel implements ActionListener {
     private final InputSpinner heightLabel = new InputSpinner("height: ");
     private final JButton setDimensionsButton = new JButton("SET DIMENSIONS");
     private final JButton generateObstaclesButton = new JButton("GENERATE OBSTACLES");
-    private final Color BACKGROUND_COLOR = Color.WHITE;
     private final JButton modeButton = new JButton("MAZE EXPLORER");
     private final JButton skipGeneratingButton = new JButton("SKIP GENERATING");
     private boolean mazeMode = false;
     private final BoardPanel boardPanel;
+    public final Color BackgroundColor = Color.white;
 
     public SidePanel(BoardPanel boardPanel){
         this.boardPanel = boardPanel;
@@ -34,8 +34,6 @@ public class SidePanel extends JPanel implements ActionListener {
         algorithmBox.setOpaque(true);
         algorithmBox.setAlignmentX(SwingConstants.CENTER);
         algorithmBox.setAlignmentY(SwingConstants.CENTER);
-
-        setDimensionsButton.addActionListener(this);
         generateObstaclesButton.addActionListener(this);
         addObstaclesButton.addActionListener(this);
         selectStartButton.addActionListener(this);
@@ -57,7 +55,11 @@ public class SidePanel extends JPanel implements ActionListener {
         add(startStopButton);
         add(resetButton);
 
-        setBackground(BACKGROUND_COLOR);
+        setBackground(BackgroundColor);
+
+        for (Component component : getComponents()){
+            component.setBackground(BackgroundColor);
+        }
         setPreferredSize(new Dimension(300, 600));
         setLayout(new GridLayout(11, 1, 5, 5));
     }

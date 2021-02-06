@@ -8,6 +8,7 @@ public class LegendPanel extends JPanel {
 
     public LegendPanel(){
         setLayout(new GridLayout(1, 10));
+        setBackground(new Color(85, 91, 110));
 
         for (SquareState state : SquareState.class.getEnumConstants()){
             KeyPanel key = new KeyPanel(state);

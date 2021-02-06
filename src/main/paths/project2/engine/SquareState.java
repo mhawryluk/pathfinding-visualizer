@@ -3,21 +3,21 @@ package paths.project2.engine;
 import java.awt.*;
 
 public enum SquareState {
-    CLOSED(255, 0, 0,
-            "closed"),
-    OPEN(0, 255, 0,
-            "open"),
-    BLANK(255, 255, 255,
-            "blank"),
-    OBSTACLE(0, 0, 0,
-            "obstacle"),
-    END(128, 0, 128,
-            "end"),
-    START(255, 165 ,0,
+    START(46, 196, 182,
             "start"),
-    PATH(64, 224, 208,
+    END(255, 159, 28,
+            "end"),
+    BLANK(190, 227, 219,
+            "unvisited"),
+    OBSTACLE(53, 80, 112,
+            "obstacle"),
+    OPEN(234, 172, 139,
+            "visited"),
+    CLOSED(229, 107, 111,
+            "processed"),
+    PATH(0, 175, 185,
             "path"),
-    MAZECRAWLER(153, 153, 255,
+    MAZECRAWLER(2, 195, 154,
             "maze explorer");
 
     public final Color color;

@@ -84,7 +84,8 @@ public class BoardPanel extends JPanel implements ActionListener {
 
                 g2D.fillRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
 
-                g2D.setPaint(Color.black);
+                g2D.setPaint(new Color(137, 176, 174));
+                g2D.setStroke(new BasicStroke(5));
 
                 if (square.up) g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
                             (square.getX() + 1) * squareSize, square.getY() * squareSize);
