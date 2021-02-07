@@ -21,6 +21,7 @@ public class SidePanel extends JPanel implements ActionListener {
     private final JButton modeButton = new JButton("MAZE EXPLORER");
     private final JButton skipGeneratingButton = new JButton("SKIP GENERATING");
     private final JButton showMazeButton = new JButton("SHOW MAZE");
+    private final JButton restartButton = new JButton("RESTART");
     private boolean mazeMode = false;
     private final BoardPanel boardPanel;
     public final Color BACKGROUND_COLOR = Color.white;
@@ -28,7 +29,7 @@ public class SidePanel extends JPanel implements ActionListener {
     public SidePanel(BoardPanel boardPanel){
         this.boardPanel = boardPanel;
 
-        String[] algorithms = {"A*", "Dijkstra", "BreadthFirstSearch"};
+        String[] algorithms = {"A*", "Dijkstra", "BreadthFirstSearch", "DepthFirstSearch"};
 
         algorithmBox = new JComboBox<>(algorithms);
         algorithmBox.setOpaque(true);
@@ -45,12 +46,15 @@ public class SidePanel extends JPanel implements ActionListener {
         modeButton.addActionListener(this);
         showMazeButton.addActionListener(this);
         skipGeneratingButton.addActionListener(this);
+        restartButton.addActionListener(this);
 
         showMazeButton.setFocusable(false);
         skipGeneratingButton.setFocusable(false);
 
-        showMazeButton.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
-        skipGeneratingButton.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
+        Font font = new Font(Font.MONOSPACED, Font.PLAIN, 10);
+        showMazeButton.setFont(font);
+        skipGeneratingButton.setFont(font);
+        restartButton.setFont(font);
 
         add(modeButton);
         add(widthLabel);
@@ -86,13 +90,23 @@ public class SidePanel extends JPanel implements ActionListener {
                 boardPanel.algorithmRunning = false;
                 boardPanel.timer.stop();
                 startStopButton.setText("START");
+                remove(restartButton);
             } else {
                 changeAlgorithm();
                 boardPanel.algorithmRunning = true;
-                startStopButton.setText("STOP");
+                startStopButton.setText("PAUSE");
+                add(restartButton);
                 boardPanel.timer.start();
             }
         }
+
+        if (e.getSource() == restartButton){
+            boardPanel.algorithmRunning = false;
+            boardPanel.timer.stop();
+            startStopButton.setText("START");
+            boardPanel.board.restart();
+        }
+
         if (e.getSource() == resetButton) {
 
             boardPanel.setDimensions(widthLabel.getValue(), heightLabel.getValue());
@@ -101,6 +115,7 @@ public class SidePanel extends JPanel implements ActionListener {
             if (!mazeMode){
                 boardPanel.algorithmRunning = false;
                 startStopButton.setText("START");
+                remove(restartButton);
 
                 boardPanel.selectingStart = false;
                 selectStartButton.setSelected(false);
@@ -204,6 +219,13 @@ public class SidePanel extends JPanel implements ActionListener {
             }
             case "BreadthFirstSearch": {
                 BFSAlgorithm newAlgorithm = new BFSAlgorithm((PathBoard)boardPanel.getBoard());
+                newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
+                newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
+                boardPanel.algorithm = newAlgorithm;
+                break;
+            }
+            case "DepthFirstSearch": {
+                DFSAlgorithm newAlgorithm = new DFSAlgorithm((PathBoard)boardPanel.getBoard());
                 newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
                 newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
                 boardPanel.algorithm = newAlgorithm;

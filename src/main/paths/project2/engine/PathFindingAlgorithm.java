@@ -1,5 +1,6 @@
 package paths.project2.engine;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public abstract class PathFindingAlgorithm {
@@ -8,7 +9,7 @@ public abstract class PathFindingAlgorithm {
     protected Square start;
     protected Square end;
     protected PathBoard board;
-    protected boolean ended = false;
+    protected boolean ended;
 
 
     public PathFindingAlgorithm(PathBoard board){
@@ -20,7 +21,7 @@ public abstract class PathFindingAlgorithm {
         this.end.state = SquareState.END;
     }
 
-    abstract public void step();
+    abstract public boolean step();
 
     public void setStartPosition(Vector2d position){
         this.start.state = SquareState.BLANK;
@@ -80,11 +81,18 @@ public abstract class PathFindingAlgorithm {
     }
 
     protected final void getPath(){
-        current = current.cameFrom;
         while (current != start) {
             current.state = SquareState.PATH;
             current = current.cameFrom;
         }
+        ended = true;
+    }
+
+    protected final void pathNotFound(){
+        JOptionPane.showMessageDialog(null,
+                "end square is not reachable from the starting point",
+                "no path",
+                JOptionPane.INFORMATION_MESSAGE);
         ended = true;
     }
 }

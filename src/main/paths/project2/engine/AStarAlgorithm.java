@@ -16,7 +16,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
         open.add(this.start);
     }
 
-    public void step(){
+    public boolean step(){
 
         if (current == null){
             current = start;
@@ -25,13 +25,17 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
             open.add(this.start);
         }
 
-        if (ended) return;
-        if (open.isEmpty()) return;
+        if (ended) return false;
+
+        if (open.isEmpty()) {
+            pathNotFound();
+            return false;
+        }
         current = open.remove();
 
         if (current == end) {
             getPath();
-            return;
+            return false;
         }
 
         for (Square neighbor : getNeighbors(current)){
@@ -44,6 +48,9 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
                     open.add(neighbor);
                     if (neighbor != end){
                         neighbor.state = SquareState.OPEN;
+                    } else {
+                        getPath();
+                        return false;
                     }
                 }
             }
@@ -52,6 +59,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
         if (current != start) {
             current.state = SquareState.CLOSED;
         }
+        return true;
     }
 
     private double h(Square square){

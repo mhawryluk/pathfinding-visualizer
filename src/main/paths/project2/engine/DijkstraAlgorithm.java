@@ -12,7 +12,7 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm{
     }
 
 
-    public void step(){
+    public boolean step(){
 
         if (current == null){
             start.dist = 0;
@@ -20,17 +20,24 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm{
             current = start;
         }
 
-        if (queue.isEmpty()) return;
-        current = queue.remove();
+        if (ended) return false;
 
-        if (current == end){
-            getPath();
-            return;
+        if (queue.isEmpty()) {
+            pathNotFound();
+            ended = true;
+            return false;
         }
 
+        current = queue.remove();
         current.visited = true;
 
         for (Square neighbor: getNeighbors(current)){
+            if (neighbor == end){
+                end.cameFrom = current;
+                getPath();
+                ended = true;
+                return false;
+            }
             if (!neighbor.visited) {
                 neighbor.state = SquareState.OPEN;
                 if (neighbor.dist > current.dist + 1) {
@@ -41,7 +48,8 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm{
                 }
             }
         }
-        current.state = SquareState.CLOSED;
+        if (current != start) current.state = SquareState.CLOSED;
+        return true;
     }
 
     @Override

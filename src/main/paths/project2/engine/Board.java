@@ -19,4 +19,15 @@ public abstract class Board {
     public boolean isWithinBoard(Vector2d field) {
         return field.follows(lowerLeft) && field.precedes(upperRight);
     }
+
+    public void restart(){
+        for (Square[] squares: board){
+            for(Square square: squares){
+                if (square.state == SquareState.OPEN || square.state == SquareState.PATH
+                || square.state == SquareState.CLOSED){
+                    square.state = SquareState.BLANK;
+                }
+            }
+        }
+    }
 }
