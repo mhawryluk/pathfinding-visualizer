@@ -1,7 +1,8 @@
-package paths.project2.engine;
+package paths.project2.engine.algorithms;
 
 import org.junit.Assert;
 import org.junit.Test;
+import paths.project2.engine.*;
 
 public class AlgorithmsTest {
 

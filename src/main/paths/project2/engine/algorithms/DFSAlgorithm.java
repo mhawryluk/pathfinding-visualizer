@@ -1,13 +1,16 @@
-package paths.project2.engine;
+package paths.project2.engine.algorithms;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import paths.project2.engine.PathBoard;
+import paths.project2.engine.Square;
+import paths.project2.engine.SquareState;
 
-public class BFSAlgorithm extends PathFindingAlgorithm{
+import java.util.Stack;
 
-    Queue<Square> queue = new LinkedList<>();
+public class DFSAlgorithm extends PathFindingAlgorithm{
 
-    public BFSAlgorithm(PathBoard board){
+    Stack<Square> stack = new Stack<>();
+
+    public DFSAlgorithm(PathBoard board){
         super(board);
     }
 
@@ -16,7 +19,7 @@ public class BFSAlgorithm extends PathFindingAlgorithm{
         if (current == null){
             current = start;
             current.visited = true;
-            queue.add(current);
+            stack.push(current);
         }
 
         if (ended) {
@@ -24,12 +27,14 @@ public class BFSAlgorithm extends PathFindingAlgorithm{
             return false;
         }
 
-        if (queue.isEmpty()) {
+        if (stack.isEmpty()) {
             pathNotFound();
             return false;
         }
 
-        current = queue.remove();
+        do {
+            current = stack.pop();
+        } while (!stack.isEmpty() && current.state == SquareState.CLOSED);
 
         for (Square neighbor: getNeighbors(current)){
             if (!neighbor.visited){
@@ -37,13 +42,14 @@ public class BFSAlgorithm extends PathFindingAlgorithm{
                     getPath();
                     return false;
                 }
-                neighbor.state = SquareState.OPEN;
-                queue.add(neighbor);
+                stack.add(neighbor);
                 neighbor.visited = true;
                 neighbor.cameFrom = current;
             }
         }
+
         if (current != start) current.state = SquareState.CLOSED;
+        if (! stack.isEmpty()) stack.peek().state = SquareState.OPEN;
         return true;
     }
 }

@@ -1,4 +1,8 @@
-package paths.project2.engine;
+package paths.project2.engine.algorithms;
+
+import paths.project2.engine.PathBoard;
+import paths.project2.engine.Square;
+import paths.project2.engine.SquareState;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;

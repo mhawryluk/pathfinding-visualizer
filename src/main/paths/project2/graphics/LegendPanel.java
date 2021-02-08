@@ -1,6 +1,7 @@
 package paths.project2.graphics;
 
-import paths.project2.engine.*;
+import paths.project2.engine.SquareState;
+
 import javax.swing.*;
 import java.awt.*;
 

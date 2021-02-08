@@ -1,11 +1,14 @@
 package paths.project2.graphics;
 
-import paths.project2.engine.*;
+import paths.project2.engine.MazeBoard;
+import paths.project2.engine.PathBoard;
+import paths.project2.engine.VisualizationState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class SidePanel extends JPanel implements ActionListener {
 
@@ -91,21 +94,19 @@ public class SidePanel extends JPanel implements ActionListener {
         }
 
         if (e.getSource() == startStopButton) {
-            if (boardPanel.algorithmRunning){
-                boardPanel.algorithmRunning = false;
-                boardPanel.timer.stop();
+            buttonReset();
+            if (boardPanel.getState() == VisualizationState.ALGORITHM_RUNNING){
+                boardPanel.pause();
                 startStopButton.setText("START");
             } else {
-                boardPanel.algorithmRunning = true;
+                boardPanel.resume();
                 startStopButton.setText("PAUSE");
                 add(restartButton);
-                boardPanel.timer.start();
             }
         }
 
         if (e.getSource() == restartButton){
-            boardPanel.algorithmRunning = false;
-            boardPanel.timer.stop();
+            boardPanel.pause();
             startStopButton.setText("START");
             changeAlgorithm();
             boardPanel.restart();
@@ -117,32 +118,36 @@ public class SidePanel extends JPanel implements ActionListener {
         }
 
         if (e.getSource() == addObstaclesButton) {
-            if (boardPanel.placingObstacles){
-                boardPanel.placingObstacles = false;
+            if (boardPanel.getState() == VisualizationState.OBSTACLES_PLACING){
+                boardPanel.setState(VisualizationState.DEFAULT);
                 addObstaclesButton.setSelected(false);
-            } else {
-                boardPanel.placingObstacles = true;
-                boardPanel.selectingStart = false;
+            } else if (boardPanel.getState() != VisualizationState.ALGORITHM_RUNNING){
+                boardPanel.setState(VisualizationState.OBSTACLES_PLACING);
                 selectStartButton.setSelected(false);
-                boardPanel.selectingEnd = false;
                 selectEndButton.setSelected(false);
+            } else {
+                addObstaclesButton.setSelected(false);
             }
         }
 
         if (e.getSource() == selectStartButton) {
-            boardPanel.selectingStart = true;
-            boardPanel.selectingEnd = false;
-            selectEndButton.setSelected(false);
-            boardPanel.placingObstacles = false;
-            addObstaclesButton.setSelected(false);
+            if (boardPanel.getState() != VisualizationState.ALGORITHM_RUNNING){
+                boardPanel.setState(VisualizationState.START_SELECTING);
+                selectEndButton.setSelected(false);
+                addObstaclesButton.setSelected(false);
+            } else {
+                selectStartButton.setSelected(false);
+            }
         }
 
         if (e.getSource() == selectEndButton) {
-            boardPanel.selectingEnd = true;
-            boardPanel.selectingStart = false;
-            selectStartButton.setSelected(false);
-            boardPanel.placingObstacles = false;
-            addObstaclesButton.setSelected(false);
+            if (boardPanel.getState() != VisualizationState.ALGORITHM_RUNNING){
+                boardPanel.setState(VisualizationState.END_SELECTING);
+                selectStartButton.setSelected(false);
+                addObstaclesButton.setSelected(false);
+            } else {
+                selectEndButton.setSelected(false);
+            }
         }
 
         if (e.getSource() == skipGeneratingButton) {
@@ -191,37 +196,14 @@ public class SidePanel extends JPanel implements ActionListener {
         }
     }
 
+    private void buttonReset() {
+        addObstaclesButton.setSelected(false);
+        selectStartButton.setSelected(false);
+        selectEndButton.setSelected(false);
+    }
+
     private void changeAlgorithm() {
-        switch ((String)algorithmBox.getSelectedItem()) {
-            case "A*": {
-                AStarAlgorithm newAlgorithm = new AStarAlgorithm((PathBoard)boardPanel.getBoard());
-                newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
-                newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
-                boardPanel.algorithm = newAlgorithm;
-                break;
-            }
-            case "Dijkstra": {
-                DijkstraAlgorithm newAlgorithm = new DijkstraAlgorithm((PathBoard)boardPanel.getBoard());
-                newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
-                newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
-                boardPanel.algorithm = newAlgorithm;
-                break;
-            }
-            case "BreadthFirstSearch": {
-                BFSAlgorithm newAlgorithm = new BFSAlgorithm((PathBoard)boardPanel.getBoard());
-                newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
-                newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
-                boardPanel.algorithm = newAlgorithm;
-                break;
-            }
-            case "DepthFirstSearch": {
-                DFSAlgorithm newAlgorithm = new DFSAlgorithm((PathBoard)boardPanel.getBoard());
-                newAlgorithm.setStartPosition(boardPanel.algorithm.getStartSquare());
-                newAlgorithm.setEndPosition(boardPanel.algorithm.getEndSquare());
-                boardPanel.algorithm = newAlgorithm;
-                break;
-            }
-        }
+        boardPanel.changeAlgorithm((String) Objects.requireNonNull(algorithmBox.getSelectedItem()));
     }
 
     private void reset(){
@@ -229,18 +211,13 @@ public class SidePanel extends JPanel implements ActionListener {
         boardPanel.reset();
 
         if (!mazeMode){
-            boardPanel.algorithmRunning = false;
+            boardPanel.setState(VisualizationState.DEFAULT);
             startStopButton.setText("START");
             remove(restartButton);
             startStopButton.setVisible(true);
-
-            boardPanel.selectingStart = false;
             selectStartButton.setSelected(false);
-
-            boardPanel.selectingEnd = false;
             selectEndButton.setSelected(false);
-
-            boardPanel.placingObstacles = false;
+            addObstaclesButton.setSelected(false);
             addObstaclesButton.setText("SELECT OBSTACLES");
         } else {
             skipGeneratingButton.setVisible(true);

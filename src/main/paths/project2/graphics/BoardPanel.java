@@ -1,52 +1,52 @@
 package paths.project2.graphics;
 
 import paths.project2.engine.*;
+import paths.project2.engine.algorithms.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 
 public class BoardPanel extends JPanel implements ActionListener {
-    public Board board;
+    private Board board;
     private SidePanel sidePanel;
-    private int squareSize;
-    public final Timer timer;
-    public PathFindingAlgorithm algorithm;
+    private final Timer timer;
+    private PathFindingAlgorithm algorithm;
     private MazeExplorer mazeExplorer;
+
+    private int squareSize;
     private int width;
     private int height;
-    private final int panelWidth = Toolkit.getDefaultToolkit().getScreenSize().width - 700;
-    private final int panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height - 200;
 
-    public boolean placingObstacles;
-    public boolean algorithmRunning;
-    public boolean mazeGenerating;
-    public boolean selectingStart;
-    public boolean selectingEnd;
-    public boolean mazeCrawling;
+    private final int PANEL_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width - 700;
+    private final int PANEL_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height - 200;
+
+    private VisualizationState state = VisualizationState.DEFAULT;
     private boolean showingMaze;
 
 
-    public BoardPanel(Board board, PathFindingAlgorithm algorithm){
+    public BoardPanel(PathBoard board) {
 
         this.board = board;
+        this.algorithm = new AStarAlgorithm(board);
+
         setDimensions(board.width, board.height);
         timer = new Timer(50, this);
         timer.start();
 
-        this.algorithm = algorithm;
 
         setBounds(0, 0, squareSize * width, squareSize * height);
-        setPreferredSize(new Dimension( width * squareSize, height * squareSize));
+        setPreferredSize(new Dimension(width * squareSize, height * squareSize));
         setLayout(null);
 
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (placingObstacles) {
+                if (state == VisualizationState.OBSTACLES_PLACING) {
                     Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
                     if (board.isWithinBoard(clickedField))
-                            placeObstacle(clickedField);
+                        placeObstacle(clickedField);
                 }
             }
 
@@ -61,19 +61,21 @@ public class BoardPanel extends JPanel implements ActionListener {
             @Override
             public void mousePressed(MouseEvent e) {
 
-                if (placingObstacles) {
-                    Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
-                    placeObstacle(clickedField);
-                }
+                Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
 
-                if (selectingStart){
-                    Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
-                    setStartPosition(clickedField);
-                }
+                switch(state){
+                    case OBSTACLES_PLACING:
+                        placeObstacle(clickedField);
+                        break;
 
-                if (selectingEnd){
-                    Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
-                    setEndPosition(clickedField);
+                    case START_SELECTING:
+                        setStartPosition(clickedField);
+                        break;
+
+
+                    case END_SELECTING:
+                        setEndPosition(clickedField);
+                        break;
                 }
             }
         });
@@ -84,13 +86,13 @@ public class BoardPanel extends JPanel implements ActionListener {
         Graphics2D g2D = (Graphics2D) g;
         super.repaint();
 
-        for (int i = 0; i < board.width; i++){
-            for (int j = 0; j < board.height; j++){
-                Square square = board.getSquareAt(i,j);
+        for (int i = 0; i < board.width; i++) {
+            for (int j = 0; j < board.height; j++) {
+                Square square = board.getSquareAt(i, j);
                 g2D.setPaint(getSquareColor(square));
 
-                if (mazeCrawling && !showingMaze){
-                    if (mazeExplorer.getCurrentSquare().dist(new Vector2d(i, j)) > 2){
+                if (state == VisualizationState.MAZE_CRAWLING && !showingMaze) {
+                    if (mazeExplorer.getCurrentSquare().dist(new Vector2d(i, j)) > 2) {
                         g2D.setPaint(new Color(0x00383D));
                         g2D.fillRect(square.getX() * squareSize, square.getY() * squareSize, squareSize, squareSize);
                         continue;
@@ -103,13 +105,13 @@ public class BoardPanel extends JPanel implements ActionListener {
                 g2D.setStroke(new BasicStroke(5));
 
                 if (square.up) g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
-                            (square.getX() + 1) * squareSize, square.getY() * squareSize);
-                if (square.down) g2D.drawLine(square.getX() * squareSize, (square.getY() + 1)* squareSize,
-                            (square.getX()+1) * squareSize, (square.getY() + 1)* squareSize);
+                        (square.getX() + 1) * squareSize, square.getY() * squareSize);
+                if (square.down) g2D.drawLine(square.getX() * squareSize, (square.getY() + 1) * squareSize,
+                        (square.getX() + 1) * squareSize, (square.getY() + 1) * squareSize);
                 if (square.left) g2D.drawLine(square.getX() * squareSize, square.getY() * squareSize,
-                            square.getX() * squareSize, (square.getY() + 1)* squareSize);
-                if (square.right) g2D.drawLine((square.getX() + 1)* squareSize, square.getY() * squareSize,
-                            (square.getX() + 1)* squareSize, (square.getY() + 1)* squareSize);
+                        square.getX() * squareSize, (square.getY() + 1) * squareSize);
+                if (square.right) g2D.drawLine((square.getX() + 1) * squareSize, square.getY() * squareSize,
+                        (square.getX() + 1) * squareSize, (square.getY() + 1) * squareSize);
             }
         }
     }
@@ -117,18 +119,17 @@ public class BoardPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == timer && algorithmRunning) {
+        if (e.getSource() == timer && state == VisualizationState.ALGORITHM_RUNNING){
             boolean ongoing = algorithm.step();
             if (!ongoing) {
-                algorithmRunning = false;
+                state = VisualizationState.DEFAULT;
                 sidePanel.algorithmEnded();
             }
         }
-        if (e.getSource() == timer && mazeGenerating) {
+        if (e.getSource() == timer && state == VisualizationState.MAZE_GENERATING) {
             boolean ongoing = ((MazeBoard) board).generateMazeStep();
             if (!ongoing) {
-                mazeGenerating = false;
-                mazeCrawling = true;
+                state = VisualizationState.MAZE_CRAWLING;
                 mazeExplorer = new MazeExplorer((MazeBoard) board);
                 addKeyListener(mazeExplorer);
                 requestFocus();
@@ -137,76 +138,123 @@ public class BoardPanel extends JPanel implements ActionListener {
         repaint();
     }
 
-    public void skipMazeGenerating(){
-        while (((MazeBoard) board).generateMazeStep());
+    public void skipMazeGenerating() {
+        while (((MazeBoard) board).generateMazeStep()) ;
     }
 
-    private Color getSquareColor(Square square){
+    private Color getSquareColor(Square square) {
         SquareState state = square.getState();
         return state.color;
     }
 
-    public void reset(){
-        if (mazeGenerating || mazeCrawling){
+    public void reset() {
+        if (state == VisualizationState.MAZE_GENERATING || state == VisualizationState.MAZE_CRAWLING){
             board = new MazeBoard(width, height);
-            mazeCrawling = false;
-            mazeGenerating = true;
+            state = VisualizationState.MAZE_GENERATING;
         } else {
             this.board = new PathBoard(width, height);
-            algorithm = new AStarAlgorithm((PathBoard)this.board);
-            algorithmRunning = false;
+            algorithm = new AStarAlgorithm((PathBoard) this.board);
+            state = VisualizationState.DEFAULT;
         }
     }
 
-    public void restart(){
+    public void restart() {
         board.restart();
-        algorithmRunning = false;
+        state = VisualizationState.DEFAULT;
     }
 
-    protected final void placeObstacle(Vector2d clickedField){
+    protected final void placeObstacle(Vector2d clickedField) {
         Square squareSelected = board.getSquareAt(clickedField);
         squareSelected.state = SquareState.OBSTACLE;
     }
 
-    protected final void setStartPosition(Vector2d clickedField){
+    protected final void setStartPosition(Vector2d clickedField) {
         algorithm.setStartPosition(clickedField);
     }
 
-    protected final void setEndPosition(Vector2d clickedField){
+    protected final void setEndPosition(Vector2d clickedField) {
         algorithm.setEndPosition(clickedField);
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
-    public void changeMazeVisibility(){
+    public void changeMazeVisibility() {
         showingMaze = !showingMaze;
     }
 
     public void generateObstacles() {
-        ((PathBoard)board).generateRandomObstacles((board.width * board.height) / 3);
+        ((PathBoard) board).generateRandomObstacles((board.width * board.height) / 3);
     }
 
-    public void changeMode(Board board, boolean mazeGenerating){
+    public void changeMode(Board board, boolean mazeGenerating) {
         this.board = board;
         setDimensions(board.width, board.height);
         timer.start();
 
-        this.mazeGenerating = mazeGenerating;
+        if (mazeGenerating) state = VisualizationState.MAZE_GENERATING;
+        else state = VisualizationState.DEFAULT;
 
         setBounds(0, 0, squareSize * board.width, squareSize * board.height);
-        setPreferredSize(new Dimension( board.width * squareSize, board.height * squareSize));
+        setPreferredSize(new Dimension(board.width * squareSize, board.height * squareSize));
         setLayout(null);
     }
 
-    public void setDimensions(int width, int height){
+    public void setDimensions(int width, int height) {
         this.width = width;
         this.height = height;
-        this.squareSize = Math.min(panelWidth/width, panelHeight/height);
+        this.squareSize = Math.min(PANEL_WIDTH / width, PANEL_HEIGHT / height);
     }
 
-    public void setSidePanel(SidePanel panel){
+    public void setSidePanel(SidePanel panel) {
         sidePanel = panel;
+    }
+
+    public void pause() {
+        timer.stop();
+        state = VisualizationState.DEFAULT;
+    }
+
+    public void resume() {
+        timer.start();
+        state = VisualizationState.ALGORITHM_RUNNING;
+    }
+
+    public void changeAlgorithm(String selectedAlgorithm) {
+        switch (selectedAlgorithm) {
+            case "A*": {
+                AStarAlgorithm newAlgorithm = new AStarAlgorithm((PathBoard) board);
+                newAlgorithm.setStartPosition(algorithm.getStartSquare());
+                newAlgorithm.setEndPosition(algorithm.getEndSquare());
+                algorithm = newAlgorithm;
+                break;
+            }
+            case "Dijkstra": {
+                DijkstraAlgorithm newAlgorithm = new DijkstraAlgorithm((PathBoard) board);
+                newAlgorithm.setStartPosition(algorithm.getStartSquare());
+                newAlgorithm.setEndPosition(algorithm.getEndSquare());
+                algorithm = newAlgorithm;
+                break;
+            }
+            case "BreadthFirstSearch": {
+                BFSAlgorithm newAlgorithm = new BFSAlgorithm((PathBoard) board);
+                newAlgorithm.setStartPosition(algorithm.getStartSquare());
+                newAlgorithm.setEndPosition(algorithm.getEndSquare());
+                algorithm = newAlgorithm;
+                break;
+            }
+            case "DepthFirstSearch": {
+                DFSAlgorithm newAlgorithm = new DFSAlgorithm((PathBoard) board);
+                newAlgorithm.setStartPosition(algorithm.getStartSquare());
+                newAlgorithm.setEndPosition(algorithm.getEndSquare());
+                algorithm = newAlgorithm;
+                break;
+            }
+        }
+    }
+
+    public VisualizationState getState() {
+        return state;
+    }
+
+    public void setState(VisualizationState state){
+        this.state = state;
     }
 }
