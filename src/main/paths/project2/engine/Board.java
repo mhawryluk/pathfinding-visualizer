@@ -23,6 +23,7 @@ public abstract class Board {
     public void restart(){
         for (Square[] squares: board){
             for(Square square: squares){
+                square.reset();
                 if (square.state == SquareState.OPEN || square.state == SquareState.PATH
                 || square.state == SquareState.CLOSED){
                     square.state = SquareState.BLANK;

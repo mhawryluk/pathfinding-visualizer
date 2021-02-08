@@ -12,10 +12,11 @@ public class KeyPanel extends JPanel {
 
         setLayout(new GridLayout(2,1));
 
-        setBounds(0,0,1000,1000);
+        setBounds(0,0,800,40);
 
         JLabel nameField = new JLabel(state.description);
         nameField.setHorizontalAlignment(SwingConstants.CENTER);
+        nameField.setPreferredSize(new Dimension(20,20));
         add(nameField);
 
         JLabel colorLabel = new JLabel();

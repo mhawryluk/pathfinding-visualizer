@@ -22,24 +22,8 @@ public class Vector2d {
         return this.x >= other.x && this.y >= other.y;
     }
 
-    public Vector2d upperRight(Vector2d other) {
-        int upRightX = Math.max(this.x, other.x);
-        int upRightY = Math.max(this.y, other.y);
-        return new Vector2d(upRightX, upRightY);
-    }
-
-    public Vector2d lowerLeft(Vector2d other) {
-        int lowLeftX = Math.min(this.x, other.x);
-        int lowLeftY = Math.min(this.y, other.y);
-        return new Vector2d(lowLeftX, lowLeftY);
-    }
-
     public Vector2d add(Vector2d other) {
         return new Vector2d(this.x + other.x, this.y + other.y);
-    }
-
-    public Vector2d subtract(Vector2d other) {
-        return new Vector2d(this.x - other.x, this.y - other.y);
     }
 
     public boolean equals(Object other) {
@@ -55,9 +39,4 @@ public class Vector2d {
     public int hashCode() {
         return Objects.hash(this.x, this.y);
     }
-
-    public Vector2d opposite() {
-        return new Vector2d(-this.x, -this.y);
-    }
-
 }

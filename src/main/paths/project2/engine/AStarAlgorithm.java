@@ -31,6 +31,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
             pathNotFound();
             return false;
         }
+
         current = open.remove();
 
         if (current == end) {
@@ -38,7 +39,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
             return false;
         }
 
-        for (Square neighbor : getNeighbors(current)){
+        for (Square neighbor: getNeighbors(current)){
             double gScore = current.g + 1;
             if (gScore < neighbor.g){
                 neighbor.cameFrom = current;

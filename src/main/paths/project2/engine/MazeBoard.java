@@ -61,19 +61,6 @@ public class MazeBoard extends Board{
 
         Collections.shuffle(neighbors);
 
-//        boolean deadend = true;
-//
-//        for (int[] neighbor: neighbors){
-//            if (isWithinBoard(new Vector2d(neighbor[0], neighbor[1])) && !board[neighbor[0]][neighbor[1]].visited) {
-//                deadend = false;
-//                break;
-//            }
-//        }
-//
-//        if (deadend){
-//            return true;
-//        }
-
 
         if (preI + 1 == i && preJ == j) {
             board[preI][preJ].right = false;

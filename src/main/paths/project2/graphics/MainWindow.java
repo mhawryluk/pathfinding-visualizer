@@ -16,6 +16,7 @@ public class MainWindow extends JFrame {
 
         SidePanel sidePanel = new SidePanel(boardPanel);
         add(sidePanel, BorderLayout.WEST);
+        boardPanel.setSidePanel(sidePanel);
 
         LegendPanel legendPanel = new LegendPanel();
         add(legendPanel, BorderLayout.SOUTH);

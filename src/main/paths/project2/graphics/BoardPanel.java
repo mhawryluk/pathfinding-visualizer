@@ -8,6 +8,7 @@ import java.awt.event.*;
 
 public class BoardPanel extends JPanel implements ActionListener {
     public Board board;
+    private SidePanel sidePanel;
     private int squareSize;
     public final Timer timer;
     public PathFindingAlgorithm algorithm;
@@ -117,7 +118,11 @@ public class BoardPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == timer && algorithmRunning) {
-            algorithm.step();
+            boolean ongoing = algorithm.step();
+            if (!ongoing) {
+                algorithmRunning = false;
+                sidePanel.algorithmEnded();
+            }
         }
         if (e.getSource() == timer && mazeGenerating) {
             boolean ongoing = ((MazeBoard) board).generateMazeStep();
@@ -153,6 +158,11 @@ public class BoardPanel extends JPanel implements ActionListener {
         }
     }
 
+    public void restart(){
+        board.restart();
+        algorithmRunning = false;
+    }
+
     protected final void placeObstacle(Vector2d clickedField){
         Square squareSelected = board.getSquareAt(clickedField);
         squareSelected.state = SquareState.OBSTACLE;
@@ -185,7 +195,6 @@ public class BoardPanel extends JPanel implements ActionListener {
 
         this.mazeGenerating = mazeGenerating;
 
-        setBackground(Color.WHITE);
         setBounds(0, 0, squareSize * board.width, squareSize * board.height);
         setPreferredSize(new Dimension( board.width * squareSize, board.height * squareSize));
         setLayout(null);
@@ -195,5 +204,9 @@ public class BoardPanel extends JPanel implements ActionListener {
         this.width = width;
         this.height = height;
         this.squareSize = Math.min(panelWidth/width, panelHeight/height);
+    }
+
+    public void setSidePanel(SidePanel panel){
+        sidePanel = panel;
     }
 }

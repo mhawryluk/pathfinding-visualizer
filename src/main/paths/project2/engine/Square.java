@@ -3,6 +3,7 @@ package paths.project2.engine;
 public class Square {
     private final Vector2d position;
     public SquareState state;
+
     public double g;
     public double f;
     public double dist = Double.POSITIVE_INFINITY;
@@ -37,7 +38,15 @@ public class Square {
         return position;
     }
 
-    public double dist(Vector2d position){
+    public int dist(Vector2d position){
         return Math.max(Math.abs(this.position.x - position.x), Math.abs(this.position.y - position.y));
+    }
+
+    public void reset(){
+        g = Double.POSITIVE_INFINITY;
+        f = Double.POSITIVE_INFINITY;
+        dist = Double.POSITIVE_INFINITY;
+        visited = false;
+        cameFrom = null;
     }
 }

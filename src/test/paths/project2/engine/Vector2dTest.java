@@ -38,35 +38,9 @@ public class Vector2dTest {
     }
 
     @Test
-    public void testUpperRight() {
-        Assert.assertEquals(vector1.upperRight(vector2), new Vector2d(1, 3));
-        Assert.assertEquals(vector1.upperRight(vector3), new Vector2d(-1, 2));
-    }
-
-    @Test
-    public void testLowerLeft() {
-        Assert.assertEquals(vector3.lowerLeft(vector2), new Vector2d(-1, 0));
-        Assert.assertEquals(vector1.lowerLeft(vector3), new Vector2d(-2, 0));
-    }
-
-    @Test
     public void testAdd() {
         Assert.assertEquals(vector1.add(vector2), new Vector2d(-1, 5));
         Assert.assertEquals(vector2.add(vector3), new Vector2d(0, 3));
         Assert.assertEquals(vector3.add(vector2), new Vector2d(0, 3));
-    }
-
-    @Test
-    public void testSubtract() {
-        Assert.assertEquals(vector1.subtract(vector2), new Vector2d(-3, -1));
-        Assert.assertEquals(vector2.subtract(vector3), new Vector2d(2, 3));
-        Assert.assertEquals(vector3.subtract(vector2), new Vector2d(-2, -3));
-    }
-
-    @Test
-    public void testOpposite() {
-        Assert.assertEquals(vector1.opposite(), new Vector2d(2, -2));
-        Assert.assertEquals(vector3.opposite(), new Vector2d(1, 0));
-        Assert.assertNotEquals(vector1.opposite(), vector2);
     }
 }

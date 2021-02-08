@@ -2,6 +2,7 @@ package paths.project2.engine;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class PathFindingAlgorithm {
 
@@ -77,6 +78,8 @@ public abstract class PathFindingAlgorithm {
                 }
             }
         }
+
+        Collections.shuffle(neighbors);
         return neighbors;
     }
 
