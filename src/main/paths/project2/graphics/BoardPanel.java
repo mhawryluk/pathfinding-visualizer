@@ -183,10 +183,15 @@ public class BoardPanel extends JPanel implements ActionListener {
     public void changeMode(Board board, boolean mazeGenerating) {
         this.board = board;
         setDimensions(board.width, board.height);
-        timer.start();
 
-        if (mazeGenerating) state = VisualizationState.MAZE_GENERATING;
-        else state = VisualizationState.DEFAULT;
+        if (mazeGenerating) {
+            timer.start();
+            state = VisualizationState.MAZE_GENERATING;
+        }
+        else {
+            state = VisualizationState.DEFAULT;
+            algorithm = new AStarAlgorithm((PathBoard)board);
+        }
 
         setBounds(0, 0, squareSize * board.width + 5, squareSize * board.height + 5);
         setPreferredSize(new Dimension(board.width * squareSize + 5, board.height * squareSize + 5));
@@ -248,5 +253,9 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     public void setState(VisualizationState state) {
         this.state = state;
+    }
+
+    public void resetStartAndEnd() {
+        board.setDefaultStartEnd();
     }
 }

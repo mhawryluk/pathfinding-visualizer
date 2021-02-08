@@ -1,8 +1,7 @@
 package paths.project2.graphics;
 
-import paths.project2.engine.MazeBoard;
-import paths.project2.engine.PathBoard;
-import paths.project2.engine.VisualizationState;
+import paths.project2.engine.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -167,9 +166,9 @@ public class SidePanel extends JPanel implements ActionListener {
                 add(selectStartButton);
                 add(selectEndButton);
                 add(algorithmBox);
+                algorithmBox.setSelectedIndex(0);
                 add(startStopButton);
-
-                changeAlgorithm();
+                boardPanel.resetStartAndEnd();
                 reset();
             } else {
                 mazeMode = true;

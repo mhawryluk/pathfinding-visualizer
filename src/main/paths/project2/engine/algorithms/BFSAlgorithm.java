@@ -9,7 +9,7 @@ import java.util.Queue;
 
 public class BFSAlgorithm extends PathFindingAlgorithm {
 
-    Queue<Square> queue = new LinkedList<>();
+    private final Queue<Square> queue = new LinkedList<>();
 
     public BFSAlgorithm(PathBoard board) {
         super(board);

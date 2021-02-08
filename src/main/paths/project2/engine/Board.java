@@ -2,7 +2,7 @@ package paths.project2.engine;
 
 public abstract class Board {
 
-    protected Square[][] board;
+    protected final Square[][] board;
     public final int width;
     public final int height;
     private final Vector2d lowerLeft = new Vector2d(0, 0);
@@ -14,10 +14,14 @@ public abstract class Board {
         upperRight = new Vector2d(width - 1, height - 1);
 
         board = new Square[width][height];
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++)
                 board[x][y] = new Square(x, y);
+        }
+
+        setDefaultStartEnd();
     }
+
 
     public Square getSquareAt(Vector2d position) {
         return board[position.x][position.y];
@@ -35,5 +39,10 @@ public abstract class Board {
                 if (squareState == SquareState.OPEN || squareState == SquareState.PATH || squareState == SquareState.CLOSED)
                     square.setState(SquareState.BLANK);
             }
+    }
+
+    public void setDefaultStartEnd(){
+        board[0][0].setState(SquareState.START);
+        board[upperRight.x][upperRight.y].setState(SquareState.END);
     }
 }

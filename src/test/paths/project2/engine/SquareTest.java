@@ -22,7 +22,7 @@ public class SquareTest {
         square.g = 15;
 
         square.reset();
-        Assert.assertTrue(square.g == Double.POSITIVE_INFINITY);
+        Assert.assertEquals(square.g, Double.POSITIVE_INFINITY, 0.0);
         Assert.assertFalse(square.visited);
     }
 }

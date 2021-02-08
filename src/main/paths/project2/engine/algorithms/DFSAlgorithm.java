@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class DFSAlgorithm extends PathFindingAlgorithm {
 
-    Stack<Square> stack = new Stack<>();
+    private final Stack<Square> stack = new Stack<>();
 
     public DFSAlgorithm(PathBoard board) {
         super(board);

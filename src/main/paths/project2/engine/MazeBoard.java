@@ -1,7 +1,5 @@
 package paths.project2.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -11,72 +9,58 @@ public class MazeBoard extends Board {
 
     public MazeBoard(int width, int height) {
         super(width, height);
-        generateMaze();
-    }
-
-    public void generateMaze() {
-        stack.push(new MazeSquare(0, 0, 1, 1));
+        stack.push(new MazeSquare(0, 0, 0, 1));
     }
 
     public boolean generateMazeStep() {
         if (stack.isEmpty()) {
-            for (Square[] squares : board) {
-                for (Square square : squares) {
-                    square.setState(SquareState.BLANK);
-                }
-            }
+            clearBoard();
             return false;
         }
 
         MazeSquare current = stack.pop();
-        int i = current.i;
-        int j = current.j;
-        int preI = current.preI;
-        int preJ = current.preJ;
 
-        for (Square[] squares : board) {
-            for (Square square : squares) {
-                square.setState(SquareState.BLANK);
-            }
-        }
-        board[i][j].setState(SquareState.MAZECRAWLER);
+        clearBoard();
+        board[current.x][current.y].setState(SquareState.MAZECRAWLER);
+        List<int[]> neighbors = current.getNeighbors();
 
-        List<int[]> neighbors = new ArrayList<>();
-        neighbors.addAll(Collections.singleton(new int[]{i + 1, j}));
-        neighbors.addAll(Collections.singleton(new int[]{i - 1, j}));
-        neighbors.addAll(Collections.singleton(new int[]{i, j - 1}));
-        neighbors.addAll(Collections.singleton(new int[]{i, j + 1}));
+        char cameFrom = current.cameFrom();
 
-        Collections.shuffle(neighbors);
+        switch (cameFrom){
+            case 'l':
+                board[current.cameFromX][current.cameFromY].right = false;
+                board[current.x][current.y].left = false;
+                break;
 
-        if (preI + 1 == i && preJ == j) {
-            board[preI][preJ].right = false;
-            board[i][j].left = false;
-        }
+            case 'r':
+                board[current.cameFromX][current.cameFromY].left = false;
+                board[current.x][current.y].right = false;
+                break;
 
-        if (preI - 1 == i && preJ == j) {
-            board[preI][preJ].left = false;
-            board[i][j].right = false;
-        }
+            case 'd':
+                board[current.cameFromX][current.cameFromY].up = false;
+                board[current.x][current.y].down = false;
+                break;
 
-        if (preI == i && preJ - 1 == j) {
-            board[preI][preJ].up = false;
-            board[i][j].down = false;
-        }
-
-        if (preI == i && preJ + 1 == j) {
-            board[preI][preJ].down = false;
-            board[i][j].up = false;
+            case 'u':
+                board[current.cameFromX][current.cameFromY].down = false;
+                board[current.x][current.y].up = false;
+                break;
         }
 
         for (int[] neighbor : neighbors) {
             if (isWithinBoard(new Vector2d(neighbor[0], neighbor[1]))
                     && !(board[neighbor[0]][neighbor[1]].visited)) {
-                stack.push(new MazeSquare(i, j, neighbor[0], neighbor[1]));
+                stack.push(new MazeSquare(current.x, current.y, neighbor[0], neighbor[1]));
                 board[neighbor[0]][neighbor[1]].visited = true;
             }
         }
-
         return true;
+    }
+
+    private void clearBoard() {
+        for (Square[] squares : board)
+            for (Square square : squares)
+                square.setState(SquareState.BLANK);
     }
 }
