@@ -10,15 +10,15 @@ import java.util.PriorityQueue;
 
 public class AStarAlgorithm extends PathFindingAlgorithm {
 
-    private final PriorityQueue<Square> open = new PriorityQueue<>(Comparator.comparing((x) -> x.f));
+    private final PriorityQueue<Square> openSquares = new PriorityQueue<>(Comparator.comparing((x) -> x.f));
 
     public AStarAlgorithm(PathBoard board) {
         super(board);
-        this.board = board;
 
-        this.start.g = 0;
-        this.start.f = h(this.start);
-        open.add(this.start);
+        start.g = 0;
+        start.f = h(this.start);
+
+        openSquares.add(this.start);
     }
 
     public boolean step() {
@@ -27,17 +27,17 @@ public class AStarAlgorithm extends PathFindingAlgorithm {
             current = start;
             start.g = 0;
             start.f = h(this.start);
-            open.add(this.start);
+            openSquares.add(this.start);
         }
 
         if (ended) return false;
 
-        if (open.isEmpty()) {
+        if (openSquares.isEmpty()) {
             pathNotFound();
             return false;
         }
 
-        current = open.remove();
+        current = openSquares.remove();
 
         if (current == end) {
             getPath();
@@ -51,7 +51,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm {
                 neighbor.g = gScore;
                 neighbor.f = gScore + h(neighbor);
                 if (neighbor.getState() != SquareState.OPEN) {
-                    open.add(neighbor);
+                    openSquares.add(neighbor);
                     if (neighbor != end) {
                         neighbor.setState(SquareState.OPEN);
                     } else {

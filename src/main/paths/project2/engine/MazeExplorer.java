@@ -22,20 +22,19 @@ public class MazeExplorer implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP && !currentSquare.up) {
+        if (e.getKeyCode() == KeyEvent.VK_UP && !currentSquare.isWallUp()) {
             currentSquare.setState(SquareState.BLANK);
             currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(0, -1)));
         }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN && !currentSquare.down) {
+        if (e.getKeyCode() == KeyEvent.VK_DOWN && !currentSquare.isWallDown()) {
             currentSquare.setState(SquareState.BLANK);
             currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(0, 1)));
         }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT && !currentSquare.left) {
-
+        if (e.getKeyCode() == KeyEvent.VK_LEFT && !currentSquare.isWallLeft()) {
             currentSquare.setState(SquareState.BLANK);
             currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(-1, 0)));
         }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT && !currentSquare.right) {
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT && !currentSquare.isWallRight()) {
             currentSquare.setState(SquareState.BLANK);
             currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(1, 0)));
         }

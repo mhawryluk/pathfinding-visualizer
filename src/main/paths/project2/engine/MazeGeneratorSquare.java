@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MazeSquare {
+public class MazeGeneratorSquare {
 
     public final int x;
     public final int y;
     public final int cameFromX;
     public final int cameFromY;
 
-    public MazeSquare(int cameFromX, int cameFromY, int x, int y) {
+    public MazeGeneratorSquare(int cameFromX, int cameFromY, int x, int y) {
         this.x = x;
         this.y = y;
         this.cameFromX = cameFromX;
@@ -27,7 +27,7 @@ public class MazeSquare {
             throw new IllegalStateException("squares at (" + x + ", " + y + ") " + "and (" + cameFromX + ", " + cameFromY + ") are not adjacent");
     }
 
-    public List<int[]> getNeighbors(){
+    public List<int[]> getNeighbors() {
         List<int[]> neighbors = new ArrayList<>();
         neighbors.addAll(Collections.singleton(new int[]{x + 1, y}));
         neighbors.addAll(Collections.singleton(new int[]{x - 1, y}));

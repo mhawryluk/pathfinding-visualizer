@@ -30,12 +30,20 @@ public abstract class PathFindingAlgorithm {
     abstract public boolean step();
 
     public void setStartPosition(Vector2d position) {
+        if (!board.isWithinBoard(position)) {
+            position = new Vector2d(0, 0);
+        }
+
         start.setState(SquareState.BLANK);
         start = board.getSquareAt(position);
         start.setState(SquareState.START);
     }
 
     public void setEndPosition(Vector2d position) {
+        if (!board.isWithinBoard(position)) {
+            position = new Vector2d(board.width - 1, board.height - 1);
+        }
+
         end.setState(SquareState.BLANK);
         end = board.getSquareAt(position);
         end.setState(SquareState.END);
@@ -58,7 +66,7 @@ public abstract class PathFindingAlgorithm {
 
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
-                if ((i != x || j != x) && board.isWithinBoard(new Vector2d(i, j))) {
+                if ((i != x || j != y) && board.isWithinBoard(new Vector2d(i, j))) {
                     Square neighbor = board.getSquareAt(new Vector2d(i, j));
                     if (neighbor.getState() == SquareState.OBSTACLE) continue;
 

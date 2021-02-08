@@ -14,7 +14,7 @@ public abstract class Board {
         upperRight = new Vector2d(width - 1, height - 1);
 
         board = new Square[width][height];
-        for (int x = 0; x < width; x++){
+        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++)
                 board[x][y] = new Square(x, y);
         }
@@ -41,7 +41,7 @@ public abstract class Board {
             }
     }
 
-    public void setDefaultStartEnd(){
+    public void setDefaultStartEnd() {
         board[0][0].setState(SquareState.START);
         board[upperRight.x][upperRight.y].setState(SquareState.END);
     }

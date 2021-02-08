@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 
 public class BoardPanel extends JPanel implements ActionListener {
-    public Board board;
+    private Board board;
     private SidePanel sidePanel;
     private final Timer timer;
     private PathFindingAlgorithm algorithm;
@@ -44,8 +44,7 @@ public class BoardPanel extends JPanel implements ActionListener {
             public void mouseDragged(MouseEvent e) {
                 if (state == VisualizationState.OBSTACLES_PLACING) {
                     Vector2d clickedField = new Vector2d((e.getX() - upperLeft.x) / squareSize, (e.getY() - upperLeft.y) / squareSize);
-                    if (board.isWithinBoard(clickedField))
-                        placeObstacle(clickedField);
+                    placeObstacle(clickedField);
                 }
             }
 
@@ -101,13 +100,13 @@ public class BoardPanel extends JPanel implements ActionListener {
                 g2D.setPaint(new Color(137, 176, 174));
                 g2D.setStroke(new BasicStroke(5));
 
-                if (square.up) g2D.drawLine(paintPosition.x, paintPosition.y,
+                if (square.isWallUp()) g2D.drawLine(paintPosition.x, paintPosition.y,
                         paintPosition.x + squareSize, paintPosition.y);
-                if (square.down) g2D.drawLine(paintPosition.x, paintPosition.y + squareSize,
+                if (square.isWallDown()) g2D.drawLine(paintPosition.x, paintPosition.y + squareSize,
                         paintPosition.x + squareSize, paintPosition.y + squareSize);
-                if (square.left) g2D.drawLine(paintPosition.x, paintPosition.y,
+                if (square.isWallLeft()) g2D.drawLine(paintPosition.x, paintPosition.y,
                         paintPosition.x, paintPosition.y + squareSize);
-                if (square.right) g2D.drawLine(paintPosition.x + squareSize, paintPosition.y,
+                if (square.isWallRight()) g2D.drawLine(paintPosition.x + squareSize, paintPosition.y,
                         paintPosition.x + squareSize, paintPosition.y + squareSize);
             }
         }
@@ -160,8 +159,10 @@ public class BoardPanel extends JPanel implements ActionListener {
     }
 
     protected final void placeObstacle(Vector2d clickedField) {
-        Square squareSelected = board.getSquareAt(clickedField);
-        squareSelected.setState(SquareState.OBSTACLE);
+        if (board.isWithinBoard(clickedField)) {
+            Square squareSelected = board.getSquareAt(clickedField);
+            squareSelected.setState(SquareState.OBSTACLE);
+        }
     }
 
     private void setStartPosition(Vector2d clickedField) {
@@ -187,10 +188,9 @@ public class BoardPanel extends JPanel implements ActionListener {
         if (mazeGenerating) {
             timer.start();
             state = VisualizationState.MAZE_GENERATING;
-        }
-        else {
+        } else {
             state = VisualizationState.DEFAULT;
-            algorithm = new AStarAlgorithm((PathBoard)board);
+            algorithm = new AStarAlgorithm((PathBoard) board);
         }
 
         setBounds(0, 0, squareSize * board.width + 5, squareSize * board.height + 5);

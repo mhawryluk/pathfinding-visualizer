@@ -10,10 +10,10 @@ public class Square {
     public boolean visited = false;
     public Square cameFrom;
 
-    public boolean up = true;
-    public boolean down = true;
-    public boolean right = true;
-    public boolean left = true;
+    private boolean up = true;
+    private boolean down = true;
+    private boolean right = true;
+    private boolean left = true;
 
     public Square(int x, int y) {
         position = new Vector2d(x, y);
@@ -22,16 +22,15 @@ public class Square {
         this.state = SquareState.BLANK;
     }
 
-
     public Vector2d getPosition() {
         return position;
     }
 
-    public void setState(SquareState state){
+    public void setState(SquareState state) {
         this.state = state;
     }
 
-    public SquareState getState(){
+    public SquareState getState() {
         return state;
     }
 
@@ -45,5 +44,45 @@ public class Square {
         dist = Double.POSITIVE_INFINITY;
         visited = false;
         cameFrom = null;
+    }
+
+    public void removeWall(char cameFrom, Square neighbor) {
+        switch (cameFrom) {
+            case 'l':
+                neighbor.right = false;
+                left = false;
+                break;
+
+            case 'r':
+                neighbor.left = false;
+                right = false;
+                break;
+
+            case 'd':
+                neighbor.up = false;
+                down = false;
+                break;
+
+            case 'u':
+                neighbor.down = false;
+                up = false;
+                break;
+        }
+    }
+
+    public boolean isWallUp() {
+        return up;
+    }
+
+    public boolean isWallDown() {
+        return down;
+    }
+
+    public boolean isWallRight() {
+        return right;
+    }
+
+    public boolean isWallLeft() {
+        return left;
     }
 }
