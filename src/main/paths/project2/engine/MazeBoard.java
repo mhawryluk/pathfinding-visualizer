@@ -11,17 +11,6 @@ public class MazeBoard extends Board {
 
     public MazeBoard(int width, int height) {
         super(width, height);
-
-        upperRight = new Vector2d(width - 1, height - 1);
-
-        board = new Square[width][height];
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                board[i][j] = new Square(i, j);
-            }
-        }
-
         generateMaze();
     }
 
@@ -33,7 +22,7 @@ public class MazeBoard extends Board {
         if (stack.isEmpty()) {
             for (Square[] squares : board) {
                 for (Square square : squares) {
-                    square.state = SquareState.BLANK;
+                    square.setState(SquareState.BLANK);
                 }
             }
             return false;
@@ -47,10 +36,10 @@ public class MazeBoard extends Board {
 
         for (Square[] squares : board) {
             for (Square square : squares) {
-                square.state = SquareState.BLANK;
+                square.setState(SquareState.BLANK);
             }
         }
-        board[i][j].state = SquareState.MAZECRAWLER;
+        board[i][j].setState(SquareState.MAZECRAWLER);
 
         List<int[]> neighbors = new ArrayList<>();
         neighbors.addAll(Collections.singleton(new int[]{i + 1, j}));
@@ -59,7 +48,6 @@ public class MazeBoard extends Board {
         neighbors.addAll(Collections.singleton(new int[]{i, j + 1}));
 
         Collections.shuffle(neighbors);
-
 
         if (preI + 1 == i && preJ == j) {
             board[preI][preJ].right = false;

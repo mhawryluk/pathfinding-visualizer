@@ -41,13 +41,13 @@ public class BFSAlgorithm extends PathFindingAlgorithm {
                     getPath();
                     return false;
                 }
-                neighbor.state = SquareState.OPEN;
+                neighbor.setState(SquareState.OPEN);
                 queue.add(neighbor);
                 neighbor.visited = true;
                 neighbor.cameFrom = current;
             }
         }
-        if (current != start) current.state = SquareState.CLOSED;
+        if (current != start) current.setState(SquareState.CLOSED);
         return true;
     }
 }

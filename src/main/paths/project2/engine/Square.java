@@ -2,7 +2,7 @@ package paths.project2.engine;
 
 public class Square {
     private final Vector2d position;
-    public SquareState state;
+    private SquareState state;
 
     public double g;
     public double f;
@@ -22,20 +22,17 @@ public class Square {
         this.state = SquareState.BLANK;
     }
 
-    public SquareState getState() {
-        return state;
-    }
-
-    public int getX() {
-        return position.x;
-    }
-
-    public int getY() {
-        return position.y;
-    }
 
     public Vector2d getPosition() {
         return position;
+    }
+
+    public void setState(SquareState state){
+        this.state = state;
+    }
+
+    public SquareState getState(){
+        return state;
     }
 
     public int dist(Vector2d position) {

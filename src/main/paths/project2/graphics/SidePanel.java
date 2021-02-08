@@ -26,7 +26,6 @@ public class SidePanel extends JPanel implements ActionListener {
     private final JButton restartButton = new JButton("RESTART");
     private boolean mazeMode = false;
     private final BoardPanel boardPanel;
-    public final Color BACKGROUND_COLOR = Color.white;
 
     public SidePanel(BoardPanel boardPanel) {
         this.boardPanel = boardPanel;
@@ -69,6 +68,7 @@ public class SidePanel extends JPanel implements ActionListener {
         add(algorithmBox);
         add(startStopButton);
 
+        Color BACKGROUND_COLOR = Color.white;
         setBackground(BACKGROUND_COLOR);
 
         for (Component component : getComponents()) {

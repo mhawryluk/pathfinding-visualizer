@@ -3,7 +3,6 @@ package paths.project2.engine.algorithms;
 import paths.project2.engine.PathBoard;
 import paths.project2.engine.Square;
 import paths.project2.engine.SquareState;
-
 import java.util.Stack;
 
 public class DFSAlgorithm extends PathFindingAlgorithm {
@@ -34,7 +33,7 @@ public class DFSAlgorithm extends PathFindingAlgorithm {
 
         do {
             current = stack.pop();
-        } while (!stack.isEmpty() && current.state == SquareState.CLOSED);
+        } while (!stack.isEmpty() && current.getState() == SquareState.CLOSED);
 
         for (Square neighbor : getNeighbors(current)) {
             if (!neighbor.visited) {
@@ -48,8 +47,8 @@ public class DFSAlgorithm extends PathFindingAlgorithm {
             }
         }
 
-        if (current != start) current.state = SquareState.CLOSED;
-        if (!stack.isEmpty()) stack.peek().state = SquareState.OPEN;
+        if (current != start) current.setState(SquareState.CLOSED);
+        if (!stack.isEmpty()) stack.peek().setState(SquareState.OPEN);
         return true;
     }
 }

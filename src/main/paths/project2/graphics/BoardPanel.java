@@ -18,6 +18,7 @@ public class BoardPanel extends JPanel implements ActionListener {
     private int squareSize;
     private int width;
     private int height;
+    private Vector2d upperLeft;
 
     private final int PANEL_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width - 700;
     private final int PANEL_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height - 200;
@@ -42,7 +43,7 @@ public class BoardPanel extends JPanel implements ActionListener {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (state == VisualizationState.OBSTACLES_PLACING) {
-                    Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
+                    Vector2d clickedField = new Vector2d((e.getX() - upperLeft.x) / squareSize, (e.getY() - upperLeft.y) / squareSize);
                     if (board.isWithinBoard(clickedField))
                         placeObstacle(clickedField);
                 }
@@ -56,7 +57,7 @@ public class BoardPanel extends JPanel implements ActionListener {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                Vector2d clickedField = new Vector2d(e.getX() / squareSize, e.getY() / squareSize);
+                Vector2d clickedField = new Vector2d((e.getX() - upperLeft.x) / squareSize, (e.getY() - upperLeft.y) / squareSize);
                 switch (state) {
                     case OBSTACLES_PLACING:
                         placeObstacle(clickedField);
@@ -78,7 +79,7 @@ public class BoardPanel extends JPanel implements ActionListener {
         Graphics2D g2D = (Graphics2D) g;
         super.repaint();
 
-        Vector2d upperLeft = new Vector2d((getWidth() - squareSize * board.width - 5) / 2, (getHeight() - squareSize * board.height - 5) / 2);
+        upperLeft = new Vector2d((getWidth() - squareSize * board.width - 5) / 2, (getHeight() - squareSize * board.height - 5) / 2);
 
         for (int x = 0; x < board.width; x++) {
             for (int y = 0; y < board.height; y++) {
@@ -160,7 +161,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     protected final void placeObstacle(Vector2d clickedField) {
         Square squareSelected = board.getSquareAt(clickedField);
-        squareSelected.state = SquareState.OBSTACLE;
+        squareSelected.setState(SquareState.OBSTACLE);
     }
 
     private void setStartPosition(Vector2d clickedField) {

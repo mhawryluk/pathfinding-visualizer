@@ -20,25 +20,25 @@ public abstract class PathFindingAlgorithm {
 
     public PathFindingAlgorithm(PathBoard board) {
         this.board = board;
-        this.start = board.getSquareAt(0, 0);
-        this.start.state = SquareState.START;
+        start = board.getSquareAt(new Vector2d(0, 0));
+        start.setState(SquareState.START);
 
-        this.end = board.getSquareAt(board.width - 1, board.height - 1);
-        this.end.state = SquareState.END;
+        end = board.getSquareAt(new Vector2d(board.width - 1, board.height - 1));
+        end.setState(SquareState.END);
     }
 
     abstract public boolean step();
 
     public void setStartPosition(Vector2d position) {
-        this.start.state = SquareState.BLANK;
-        this.start = board.getSquareAt(position);
-        this.start.state = SquareState.START;
+        start.setState(SquareState.BLANK);
+        start = board.getSquareAt(position);
+        start.setState(SquareState.START);
     }
 
     public void setEndPosition(Vector2d position) {
-        this.end.state = SquareState.BLANK;
-        this.end = board.getSquareAt(position);
-        this.end.state = SquareState.END;
+        end.setState(SquareState.BLANK);
+        end = board.getSquareAt(position);
+        end.setState(SquareState.END);
     }
 
     public Vector2d getStartSquare() {
@@ -51,22 +51,23 @@ public abstract class PathFindingAlgorithm {
 
     protected ArrayList<Square> getNeighbors(Square square) {
         ArrayList<Square> neighbors = new ArrayList<>();
-        int x = square.getX();
-        int y = square.getY();
+
+        Vector2d position = square.getPosition();
+        int x = position.x;
+        int y = position.y;
 
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
                 if ((i != x || j != x) && board.isWithinBoard(new Vector2d(i, j))) {
-                    Square neighbor = board.getSquareAt(i, j);
-                    if (neighbor.state == SquareState.OBSTACLE) continue;
+                    Square neighbor = board.getSquareAt(new Vector2d(i, j));
+                    if (neighbor.getState() == SquareState.OBSTACLE) continue;
 
                     if (i != x && j != y) {
-                        if (board.getSquareAt(i, y).state == SquareState.OBSTACLE &&
-                                board.getSquareAt(x, j).state == SquareState.OBSTACLE) {
+                        if (board.getSquareAt(new Vector2d(i, y)).getState() == SquareState.OBSTACLE &&
+                                board.getSquareAt(new Vector2d(x, j)).getState() == SquareState.OBSTACLE) {
                             continue;
                         }
                     }
-
                     neighbors.add(neighbor);
                 }
             }
@@ -78,7 +79,7 @@ public abstract class PathFindingAlgorithm {
 
     protected final void getPath() {
         while (current != start) {
-            current.state = SquareState.PATH;
+            current.setState(SquareState.PATH);
             current = current.cameFrom;
         }
         ended = true;

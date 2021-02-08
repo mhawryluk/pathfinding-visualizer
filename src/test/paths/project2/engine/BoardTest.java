@@ -23,17 +23,17 @@ public class BoardTest {
     @Test
     public void testRestart() {
         PathBoard board = new PathBoard(3,3);
-        board.getSquareAt(new Vector2d(1,1)).state = SquareState.OPEN;
-        Assert.assertEquals(board.getSquareAt(new Vector2d(1,1)).state, SquareState.OPEN);
+        board.getSquareAt(new Vector2d(1,1)).setState(SquareState.OPEN);
+        Assert.assertEquals(board.getSquareAt(new Vector2d(1,1)).getState(), SquareState.OPEN);
 
         board.restart();
-        Assert.assertEquals(board.getSquareAt(new Vector2d(1,1)).state, SquareState.BLANK);
+        Assert.assertEquals(board.getSquareAt(new Vector2d(1,1)).getState(), SquareState.BLANK);
 
-        board.getSquareAt(new Vector2d(2,2)).state = SquareState.OBSTACLE;
-        Assert.assertEquals(board.getSquareAt(new Vector2d(2,2)).state, SquareState.OBSTACLE);
+        board.getSquareAt(new Vector2d(2,2)).setState(SquareState.OBSTACLE);
+        Assert.assertEquals(board.getSquareAt(new Vector2d(2,2)).getState(), SquareState.OBSTACLE);
 
         board.restart();
-        Assert.assertEquals(board.getSquareAt(new Vector2d(2,2)).state, SquareState.OBSTACLE);
+        Assert.assertEquals(board.getSquareAt(new Vector2d(2,2)).getState(), SquareState.OBSTACLE);
     }
 
     @Test
@@ -41,14 +41,14 @@ public class BoardTest {
         PathBoard board = new PathBoard(5,5);
         board.generateRandomObstacles(10);
 
-        int numObsticles = 0;
+        int numObstacles = 0;
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
-                if (board.getSquareAt(new Vector2d(i, j)).state == SquareState.OBSTACLE)
-                    numObsticles++;
+                if (board.getSquareAt(new Vector2d(i, j)).getState() == SquareState.OBSTACLE)
+                    numObstacles++;
             }
         }
 
-        Assert.assertTrue(numObsticles > 0 && numObsticles <= 10);
+        Assert.assertTrue(numObstacles > 0 && numObstacles <= 10);
     }
 }

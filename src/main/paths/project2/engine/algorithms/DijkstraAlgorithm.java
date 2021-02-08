@@ -15,7 +15,6 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm {
         super(board);
     }
 
-
     public boolean step() {
 
         if (current == null) {
@@ -43,7 +42,7 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm {
                 return false;
             }
             if (!neighbor.visited) {
-                neighbor.state = SquareState.OPEN;
+                neighbor.setState(SquareState.OPEN);
                 if (neighbor.dist > current.dist + 1) {
                     neighbor.dist = current.dist + 1;
                     neighbor.cameFrom = current;
@@ -52,7 +51,7 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm {
                 }
             }
         }
-        if (current != start) current.state = SquareState.CLOSED;
+        if (current != start) current.setState(SquareState.CLOSED);
         return true;
     }
 

@@ -3,6 +3,7 @@ package paths.project2.engine.algorithms;
 import paths.project2.engine.PathBoard;
 import paths.project2.engine.Square;
 import paths.project2.engine.SquareState;
+import paths.project2.engine.Vector2d;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -49,10 +50,10 @@ public class AStarAlgorithm extends PathFindingAlgorithm {
                 neighbor.cameFrom = current;
                 neighbor.g = gScore;
                 neighbor.f = gScore + h(neighbor);
-                if (neighbor.state != SquareState.OPEN) {
+                if (neighbor.getState() != SquareState.OPEN) {
                     open.add(neighbor);
                     if (neighbor != end) {
-                        neighbor.state = SquareState.OPEN;
+                        neighbor.setState(SquareState.OPEN);
                     } else {
                         getPath();
                         return false;
@@ -62,13 +63,14 @@ public class AStarAlgorithm extends PathFindingAlgorithm {
         }
 
         if (current != start) {
-            current.state = SquareState.CLOSED;
+            current.setState(SquareState.CLOSED);
         }
         return true;
     }
 
     private double h(Square square) {
-        return Math.pow(square.getX() - end.getX(), 2) +
-                Math.pow(square.getY() - end.getY(), 2);
+        Vector2d vector = square.getPosition().subtract(end.getPosition());
+        return Math.pow(vector.x, 2) +
+                Math.pow(vector.y, 2);
     }
 }
