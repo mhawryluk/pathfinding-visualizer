@@ -6,17 +6,17 @@ import paths.project2.engine.SquareState;
 
 import java.util.Stack;
 
-public class DFSAlgorithm extends PathFindingAlgorithm{
+public class DFSAlgorithm extends PathFindingAlgorithm {
 
     Stack<Square> stack = new Stack<>();
 
-    public DFSAlgorithm(PathBoard board){
+    public DFSAlgorithm(PathBoard board) {
         super(board);
     }
 
     @Override
     public boolean step() {
-        if (current == null){
+        if (current == null) {
             current = start;
             current.visited = true;
             stack.push(current);
@@ -36,9 +36,9 @@ public class DFSAlgorithm extends PathFindingAlgorithm{
             current = stack.pop();
         } while (!stack.isEmpty() && current.state == SquareState.CLOSED);
 
-        for (Square neighbor: getNeighbors(current)){
-            if (!neighbor.visited){
-                if (neighbor == end){
+        for (Square neighbor : getNeighbors(current)) {
+            if (!neighbor.visited) {
+                if (neighbor == end) {
                     getPath();
                     return false;
                 }
@@ -49,7 +49,7 @@ public class DFSAlgorithm extends PathFindingAlgorithm{
         }
 
         if (current != start) current.state = SquareState.CLOSED;
-        if (! stack.isEmpty()) stack.peek().state = SquareState.OPEN;
+        if (!stack.isEmpty()) stack.peek().state = SquareState.OPEN;
         return true;
     }
 }

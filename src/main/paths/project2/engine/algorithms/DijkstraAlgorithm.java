@@ -7,18 +7,18 @@ import paths.project2.engine.SquareState;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-public class DijkstraAlgorithm extends PathFindingAlgorithm{
+public class DijkstraAlgorithm extends PathFindingAlgorithm {
 
-    private final PriorityQueue <Square> queue = new PriorityQueue<>(Comparator.comparing((x) -> x.dist));
+    private final PriorityQueue<Square> queue = new PriorityQueue<>(Comparator.comparing((x) -> x.dist));
 
-    public DijkstraAlgorithm(PathBoard board){
+    public DijkstraAlgorithm(PathBoard board) {
         super(board);
     }
 
 
-    public boolean step(){
+    public boolean step() {
 
-        if (current == null){
+        if (current == null) {
             start.dist = 0;
             queue.add(start);
             current = start;
@@ -35,8 +35,8 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm{
         current = queue.remove();
         current.visited = true;
 
-        for (Square neighbor: getNeighbors(current)){
-            if (neighbor == end){
+        for (Square neighbor : getNeighbors(current)) {
+            if (neighbor == end) {
                 end.cameFrom = current;
                 getPath();
                 ended = true;
@@ -57,7 +57,7 @@ public class DijkstraAlgorithm extends PathFindingAlgorithm{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Dijkstra";
     }
 }

@@ -7,10 +7,10 @@ import java.awt.*;
 
 public class LegendPanel extends JPanel {
 
-    public LegendPanel(){
+    public LegendPanel() {
         setLayout(new GridLayout(1, 10));
 
-        for (SquareState state : SquareState.class.getEnumConstants()){
+        for (SquareState state : SquareState.class.getEnumConstants()) {
             KeyPanel key = new KeyPanel(state);
             add(key);
         }

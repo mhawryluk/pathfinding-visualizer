@@ -5,20 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-public class MazeBoard extends Board{
+public class MazeBoard extends Board {
 
     private final Stack<MazeSquare> stack = new Stack<>();
 
-    public MazeBoard(int width, int height){
-        this.width = width;
-        this.height = height;
+    public MazeBoard(int width, int height) {
+        super(width, height);
 
-        upperRight = new Vector2d(width-1, height-1);
+        upperRight = new Vector2d(width - 1, height - 1);
 
         board = new Square[width][height];
 
-        for (int i = 0; i < width; i++){
-            for (int j = 0; j < height; j++){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 board[i][j] = new Square(i, j);
             }
         }
@@ -26,12 +25,12 @@ public class MazeBoard extends Board{
         generateMaze();
     }
 
-    public void generateMaze(){
-        stack.push(new MazeSquare(0,0,1,1));
+    public void generateMaze() {
+        stack.push(new MazeSquare(0, 0, 1, 1));
     }
 
     public boolean generateMazeStep() {
-        if (stack.isEmpty()){
+        if (stack.isEmpty()) {
             for (Square[] squares : board) {
                 for (Square square : squares) {
                     square.state = SquareState.BLANK;
@@ -85,8 +84,8 @@ public class MazeBoard extends Board{
         for (int[] neighbor : neighbors) {
             if (isWithinBoard(new Vector2d(neighbor[0], neighbor[1]))
                     && !(board[neighbor[0]][neighbor[1]].visited)) {
-               stack.push(new MazeSquare(i, j, neighbor[0], neighbor[1]));
-               board[neighbor[0]][neighbor[1]].visited = true;
+                stack.push(new MazeSquare(i, j, neighbor[0], neighbor[1]));
+                board[neighbor[0]][neighbor[1]].visited = true;
             }
         }
 

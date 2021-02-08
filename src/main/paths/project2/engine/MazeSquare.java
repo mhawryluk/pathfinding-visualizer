@@ -7,7 +7,7 @@ public class MazeSquare {
     public final int preI;
     public final int preJ;
 
-    public MazeSquare(int preI, int preJ, int i, int j){
+    public MazeSquare(int preI, int preJ, int i, int j) {
         this.i = i;
         this.j = j;
         this.preI = preI;

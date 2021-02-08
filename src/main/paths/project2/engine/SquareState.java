@@ -23,8 +23,8 @@ public enum SquareState {
     public final Color color;
     public final String description;
 
-    SquareState(int r, int g, int b, String description){
-        color = new Color(r,g,b);
+    SquareState(int r, int g, int b, String description) {
+        color = new Color(r, g, b);
         this.description = description;
     }
 }

@@ -15,34 +15,34 @@ public class Square {
     public boolean right = true;
     public boolean left = true;
 
-    public Square(int x, int y){
+    public Square(int x, int y) {
         position = new Vector2d(x, y);
         this.g = Double.POSITIVE_INFINITY;
         this.f = Double.POSITIVE_INFINITY;
         this.state = SquareState.BLANK;
     }
 
-    public SquareState getState(){
+    public SquareState getState() {
         return state;
     }
 
-    public int getX(){
+    public int getX() {
         return position.x;
     }
 
-    public int getY(){
+    public int getY() {
         return position.y;
     }
 
-    public Vector2d getPosition(){
+    public Vector2d getPosition() {
         return position;
     }
 
-    public int dist(Vector2d position){
+    public int dist(Vector2d position) {
         return Math.max(Math.abs(this.position.x - position.x), Math.abs(this.position.y - position.y));
     }
 
-    public void reset(){
+    public void reset() {
         g = Double.POSITIVE_INFINITY;
         f = Double.POSITIVE_INFINITY;
         dist = Double.POSITIVE_INFINITY;

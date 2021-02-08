@@ -11,7 +11,7 @@ public class MazeExplorer implements KeyListener {
 
     public MazeExplorer(MazeBoard board) {
         this.board = board;
-        currentSquare = board.getSquareAt(new Vector2d(0,0));
+        currentSquare = board.getSquareAt(new Vector2d(0, 0));
         currentSquare.state = SquareState.MAZECRAWLER;
         board.getSquareAt(board.upperRight).state = SquareState.END;
     }
@@ -21,36 +21,37 @@ public class MazeExplorer implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e){}
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP){
-            if (!currentSquare.up){
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            if (!currentSquare.up) {
                 currentSquare.state = SquareState.BLANK;
-                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(0,-1)));
+                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(0, -1)));
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN){
-            if (!currentSquare.down){
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            if (!currentSquare.down) {
                 currentSquare.state = SquareState.BLANK;
-                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(0,1)));
+                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(0, 1)));
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT){
-            if (!currentSquare.left){
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (!currentSquare.left) {
                 currentSquare.state = SquareState.BLANK;
-                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(-1,0)));
+                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(-1, 0)));
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-            if (!currentSquare.right){
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (!currentSquare.right) {
                 currentSquare.state = SquareState.BLANK;
-                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(1,0)));
+                currentSquare = board.getSquareAt(currentSquare.getPosition().add(new Vector2d(1, 0)));
             }
         }
 
-        if (currentSquare.state == SquareState.END){
+        if (currentSquare.state == SquareState.END) {
             JOptionPane.showMessageDialog(null, "congrats! you've reached the end", "the end", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -58,5 +59,6 @@ public class MazeExplorer implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e){}
+    public void keyReleased(KeyEvent e) {
+    }
 }

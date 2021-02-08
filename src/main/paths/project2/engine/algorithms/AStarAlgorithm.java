@@ -7,11 +7,11 @@ import paths.project2.engine.SquareState;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-public class AStarAlgorithm extends PathFindingAlgorithm{
+public class AStarAlgorithm extends PathFindingAlgorithm {
 
     private final PriorityQueue<Square> open = new PriorityQueue<>(Comparator.comparing((x) -> x.f));
 
-    public AStarAlgorithm(PathBoard board){
+    public AStarAlgorithm(PathBoard board) {
         super(board);
         this.board = board;
 
@@ -20,9 +20,9 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
         open.add(this.start);
     }
 
-    public boolean step(){
+    public boolean step() {
 
-        if (current == null){
+        if (current == null) {
             current = start;
             start.g = 0;
             start.f = h(this.start);
@@ -43,15 +43,15 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
             return false;
         }
 
-        for (Square neighbor: getNeighbors(current)){
+        for (Square neighbor : getNeighbors(current)) {
             double gScore = current.g + 1;
-            if (gScore < neighbor.g){
+            if (gScore < neighbor.g) {
                 neighbor.cameFrom = current;
                 neighbor.g = gScore;
                 neighbor.f = gScore + h(neighbor);
-                if (neighbor.state != SquareState.OPEN){
+                if (neighbor.state != SquareState.OPEN) {
                     open.add(neighbor);
-                    if (neighbor != end){
+                    if (neighbor != end) {
                         neighbor.state = SquareState.OPEN;
                     } else {
                         getPath();
@@ -67,7 +67,7 @@ public class AStarAlgorithm extends PathFindingAlgorithm{
         return true;
     }
 
-    private double h(Square square){
+    private double h(Square square) {
         return Math.pow(square.getX() - end.getX(), 2) +
                 Math.pow(square.getY() - end.getY(), 2);
     }

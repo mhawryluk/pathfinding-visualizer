@@ -7,17 +7,17 @@ import paths.project2.engine.SquareState;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BFSAlgorithm extends PathFindingAlgorithm{
+public class BFSAlgorithm extends PathFindingAlgorithm {
 
     Queue<Square> queue = new LinkedList<>();
 
-    public BFSAlgorithm(PathBoard board){
+    public BFSAlgorithm(PathBoard board) {
         super(board);
     }
 
     @Override
     public boolean step() {
-        if (current == null){
+        if (current == null) {
             current = start;
             current.visited = true;
             queue.add(current);
@@ -35,9 +35,9 @@ public class BFSAlgorithm extends PathFindingAlgorithm{
 
         current = queue.remove();
 
-        for (Square neighbor: getNeighbors(current)){
-            if (!neighbor.visited){
-                if (neighbor == end){
+        for (Square neighbor : getNeighbors(current)) {
+            if (!neighbor.visited) {
+                if (neighbor == end) {
                     getPath();
                     return false;
                 }

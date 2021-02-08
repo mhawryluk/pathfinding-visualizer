@@ -1,11 +1,12 @@
 package paths.project2.graphics;
 
 import paths.project2.engine.PathBoard;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
-    public MainWindow(){
+    public MainWindow() {
         setTitle("Pathfinder");
         setLayout(new BorderLayout(0, 0));
 
@@ -28,13 +29,13 @@ public class MainWindow extends JFrame {
         changeFont(this, font);
 
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenDim.width/2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
+        setLocation(screenDim.width / 2 - getSize().width / 2, screenDim.height / 2 - getSize().height / 2);
     }
 
-    private void changeFont(Component component, Font font){
+    private void changeFont(Component component, Font font) {
         component.setFont(font);
-        if (component instanceof Container){
-            for (Component child :((Container) component).getComponents()){
+        if (component instanceof Container) {
+            for (Component child : ((Container) component).getComponents()) {
                 changeFont(child, font);
             }
         }
